@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Performance Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #880E4F;
+            --secondary-color: #43002a;
+            --accent-color: #F39C12;
+            --light-text: white;
+            --border-radius: 12px;
+            --card-background: rgba(136, 14, 79, 0.9);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar Styles */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform var(--transition-speed);
+            min-width: 200px;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            width: 30px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-grow: 1;
+            margin: 0 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-speed) ease-in-out;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(243, 156, 18, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-color);
+            background-color: rgba(243, 156, 18, 0.2);
+        }
+
+        .profile {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: white;
+            cursor: pointer;
+            transition: transform var(--transition-speed);
+            min-width: 35px;
+        }
+
+        .profile:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* Performance Dashboard Styles */
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+
+        .performance-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .course-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            border: 1px solid rgba(194, 24, 91, 0.2);
+        }
+
+        /* Rest of your existing styles */
+        .circle-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .circle-container:hover {
+            transform: scale(1.05);
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .progress-circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        .progress-circle-bg {
+            stroke: rgba(194, 24, 91, 0.1);
+        }
+
+        .progress-circle-outer {
+            stroke: #D35400;
+        }
+
+        .progress-circle-middle {
+            stroke: #560a33;
+        }
+
+        .progress-circle-inner {
+            stroke: var(--accent-color);
+        }
+
+        .percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--light-text);
+        }
+
+        .course-title {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--light-text);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(67, 0, 42, 0.9);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+    background-color: var(--card-background);
+    margin: 5% auto;
+    padding: 25px;
+    width: 80%;
+    max-width: 700px;
+    border-radius: var(--border-radius);
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid rgba(194, 24, 91, 0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .time-card {
+            background: var(--card-background);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            border: 1px solid rgba(194, 24, 91, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .time-card:hover {
+            transform: translateX(10px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .performance-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar {
+                flex-wrap: wrap;
+                padding: 10px 15px;
+            }
+            
+            .logo {
+                margin-right: 20px;
+            }
+            
+            .nav-links {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+                justify-content: space-between;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+
+            .performance-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            margin: 8px 0;
+            background-color: rgba(136, 14, 79, 0.3);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+
+        .modal-content {
+            color: var(--light-text);
+        }
+
+        .modal-content h2 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-content h3 {
+            font-size: 20px;
+            margin: 25px 0 15px 0;
+            color: var(--accent-color);
+        }
+
+        .stars {
+            color: var(--accent-color);
+        }
+
+        .score {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .not-completed {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="mycourse.html">My Courses</a>
+            <a href="Explorecourses.html">Explore Courses</a>
+            <a href="performance.html" class="active">Performance</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="exam corner.html">Exam Corner</a>
+            <a href="#">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile"></div></a>
+    </div>
+
+    <div class="dashboard">
+        <h1>Course Performance</h1>
+        
+        <div class="performance-section" id="performanceSection">
+            <!-- Course cards will be generated here -->
+        </div>
+
+        <div class="time-analysis">
+            <h2>Time Analysis</h2>
+            <div id="timeAnalysis">
+                <!-- Time analysis cards will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for course details -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('courseModal')">&times;</span>
+            <div id="courseModalContent"></div>
+        </div>
+    </div>
+
+    <!-- Modal for time analysis -->
+    <div id="timeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('timeModal')">&times;</span>
+            <div id="timeModalContent"></div>
+        </div>
+    </div>
+</body>
+</html>
+    <script>
+        const courseData = [
+            {
+                title: "Web Development",
+                progress: { outer: 88, middle: 82, inner: 75 },
+                lessons: [
+                    { title: "HTML5 Structure and Semantics", completed: true, stars: 4 },
+                    { title: "CSS Flexbox & Grid Systems", completed: true, stars: 5 },
+                    { title: "JavaScript ES6+ Features", completed: true, stars: 3 },
+                    { title: "React Component Lifecycle", completed: true, stars: 4 },
+                    { title: "RESTful API Integration", completed: true, stars: 5 },
+                    { title: "Web Security & Authentication", completed: false, stars: 0 },
+                    { title: "Performance Optimization", completed: false, stars: 0 },
+                    { title: "Progressive Web Apps", completed: true, stars: 4 },
+                    { title: "Testing & Debugging", completed: true, stars: 3 },
+                    { title: "Deployment & DevOps", completed: false, stars: 0 }
+                ],
+                tests: [
+                    { title: "HTML/CSS Fundamentals", score: 85 },
+                    { title: "JavaScript Basics", score: 92 },
+                    { title: "Frontend Frameworks", score: 78 },
+                    { title: "Backend Integration", score: 88 },
+                    { title: "Web Security", score: 95 },
+                    { title: "Final Project", score: 90 }
+                ],
+                timeSpent: [25, 30, 20, 15, 18, 22, 28, 19, 21, 17]
+            },
+            // Add remaining course data here...
+            {
+                title: "Data Structures",
+                progress: { outer: 82, middle: 78, inner: 70 },
+                lessons: [
+                    { title: "Arrays & Linked Lists", completed: true, stars: 5 },
+                    { title: "Stacks & Queues", completed: true, stars: 4 },
+                    { title: "Trees & Binary Search", completed: true, stars: 3 },
+                    { title: "Graphs & Network Flows", completed: true, stars: 4 },
+                    { title: "Hash Tables", completed: true, stars: 5 },
+                    { title: "Heaps & Priority Queues", completed: true, stars: 4 },
+                    { title: "Dynamic Programming", completed: false, stars: 0 },
+                    { title: "Algorithm Analysis", completed: true, stars: 3 },
+                    { title: "Advanced Tree Structures", completed: false, stars: 0 },
+                    { title: "Complex Data Structures", completed: false, stars: 0 }
+                ],
+                tests: [
+                    { title: "Basic Data Structures", score: 88 },
+                    { title: "Advanced Algorithms", score: 85 },
+                    { title: "Tree Operations", score: 92 },
+                    { title: "Graph Algorithms", score: 87 },
+                    { title: "Hash Functions", score: 90 },
+                    { title: "Final Assessment", score: 89 }
+                ],
+                timeSpent: [22, 25, 20, 18, 15, 23, 28, 19, 21, 16]
+            },
+            {
+                title: "Machine Learning",
+                progress: { outer: 75, middle: 70, inner: 65 },
+                lessons: [
+                    { title: "Introduction to ML", completed: true, stars: 5 },
+                    { title: "Linear Regression", completed: true, stars: 4 },
+                    { title: "Classification Algorithms", completed: true, stars: 4 },
+                    { title: "Neural Networks Basics", completed: true, stars: 3 },
+                    { title: "Deep Learning", completed: false, stars: 0 },
+                    { title: "Supervised Learning", completed: true, stars: 4 },
+                    { title: "Unsupervised Learning", completed: false, stars: 0 },
+                    { title: "Model Evaluation", completed: true, stars: 4 },
+                    { title: "Feature Engineering", completed: true, stars: 3 },
+                    { title: "ML in Production", completed: false, stars: 0 }
+                ],
+                tests: [
+                    { title: "ML Fundamentals", score: 82 },
+                    { title: "Algorithm Implementation", score: 88 },
+                    { title: "Model Training", score: 85 },
+                    { title: "Neural Networks", score: 80 },
+                    { title: "Advanced Topics", score: 78 },
+                    { title: "Final Project", score: 85 }
+                ],
+                timeSpent: [20, 25, 30, 28, 22, 18, 15, 20, 25, 22]
+            },
+            {
+                title: "Cloud Computing",
+                progress: { outer: 80, middle: 75, inner: 70 },
+                lessons: [
+                    { title: "Cloud Fundamentals", completed: true, stars: 4 },
+                    { title: "AWS Services", completed: true, stars: 5 },
+                    { title: "Cloud Security", completed: true, stars: 4 },
+                    { title: "Serverless Computing", completed: true, stars: 3 },
+                    { title: "Containers & Docker", completed: true, stars: 5 },
+                    { title: "Kubernetes", completed: false, stars: 0 },
+                    { title: "Cloud Architecture", completed: true, stars: 4 },
+                    { title: "DevOps Practices", completed: true, stars: 4 },
+                    { title: "Monitoring & Logging", completed: false, stars: 0 },
+                    { title: "Cost Optimization", completed: true, stars: 3 }
+                ],
+                tests: Array(6).fill().map((_, i) => ({
+                    title: `Cloud Computing Test ${i + 1}`,
+                    score: Math.floor(Math.random() * 15) + 80
+                })),
+                timeSpent: Array(10).fill().map(() => Math.floor(Math.random() * 20) + 15)
+            },
+            {
+                title: "Mobile Development",
+                progress: { outer: 85, middle: 80, inner: 75 },
+                lessons: [
+                    { title: "Mobile UI Design", completed: true, stars: 5 },
+                    { title: "Native Development", completed: true, stars: 4 },
+                    { title: "Cross-Platform Dev", completed: true, stars: 4 },
+                    { title: "App Architecture", completed: true, stars: 3 },
+                    { title: "Mobile Security", completed: true, stars: 4 },
+                    { title: "App Store Guidelines", completed: true, stars: 5 },
+                    { title: "Push Notifications", completed: false, stars: 0 },
+                    { title: "Local Storage", completed: true, stars: 4 },
+                    { title: "API Integration", completed: true, stars: 3 },
+                    { title: "App Publishing", completed: false, stars: 0 }
+                ],
+                tests: Array(6).fill().map((_, i) => ({
+                    title: `Mobile Dev Test ${i + 1}`,
+                    score: Math.floor(Math.random() * 15) + 80
+                })),
+                timeSpent: Array(10).fill().map(() => Math.floor(Math.random() * 20) + 15)
+            },
+            {
+                title: "Cybersecurity",
+                progress: { outer: 78, middle: 73, inner: 68 },
+                lessons: [
+                    { title: "Security Fundamentals", completed: true, stars: 4 },
+                    { title: "Network Security", completed: true, stars: 5 },
+                    { title: "Cryptography", completed: true, stars: 3 },
+                    { title: "Ethical Hacking", completed: true, stars: 4 },
+                    { title: "Security Policies", completed: true, stars: 5 },
+                    { title: "Incident Response", completed: false, stars: 0 },
+                    { title: "Malware Analysis", completed: true, stars: 4 },
+                    { title: "Web Security", completed: true, stars: 3 },
+                    { title: "Mobile Security", completed: false, stars: 0 },
+                    { title: "Cloud Security", completed: true, stars: 4 }
+                ],
+                tests: Array(6).fill().map((_, i) => ({
+                    title: `Security Test ${i + 1}`,
+                    score: Math.floor(Math.random() * 15) + 80
+                })),
+                timeSpent: Array(10).fill().map(() => Math.floor(Math.random() * 20) + 15)
+            }
+        ];
+
+        function calculateStrokeDasharray(percentage, radius) {
+            const circumference = 2 * Math.PI * radius;
+            return `${(percentage / 100) * circumference} ${circumference}`;
+        }
+
+        function createCourseCards() {
+            const container = document.getElementById('performanceSection');
+            courseData.forEach((course, index) => {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.innerHTML = `
+                    <div class="circle-container" onclick="showCourseDetails(${index})">
+                        <svg class="progress-ring" width="150" height="150">
+                            <!-- Background circles -->
+                            <circle class="progress-circle progress-circle-bg" cx="75" cy="75" r="70"/>
+                            <circle class="progress-circle progress-circle-bg" cx="75" cy="75" r="55"/>
+                            <circle class="progress-circle progress-circle-bg" cx="75" cy="75" r="40"/>
+                            
+                            <!-- Progress circles -->
+                            <circle class="progress-circle progress-circle-outer" cx="75" cy="75" r="70"
+                                   stroke-dasharray="${calculateStrokeDasharray(course.progress.outer, 70)}"/>
+                            <circle class="progress-circle progress-circle-middle" cx="75" cy="75" r="55"
+                                   stroke-dasharray="${calculateStrokeDasharray(course.progress.middle, 55)}"/>
+                            <circle class="progress-circle progress-circle-inner" cx="75" cy="75" r="40"
+                                   stroke-dasharray="${calculateStrokeDasharray(course.progress.inner, 40)}"/>
+                        </svg>
+                        <div class="percentage">${course.progress.outer}%</div>
+                    </div>
+                    <div class="course-title">${course.title}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function createTimeAnalysis() {
+            const container = document.getElementById('timeAnalysis');
+            courseData.forEach((course, index) => {
+                const card = document.createElement('div');
+                card.className = 'time-card';
+                card.innerHTML = `
+                    <div onclick="showTimeDetails(${index})">
+                        <h3>${course.title}</h3>
+                        <div class="progress-bar">
+                            <div class="progress-value" style="width: ${course.progress.outer}%"></div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+
+        function showCourseDetails(index) {
+            const course = courseData[index];
+            const modal = document.getElementById('courseModal');
+            const content = document.getElementById('courseModalContent');
+            
+            content.innerHTML = `
+                <h2>${course.title} - Performance Details</h2>
+                <h3>Lessons Progress</h3>
+                ${course.lessons.map(lesson => `
+                    <div class="lesson-item">
+                        <span>${lesson.title}</span>
+                        <span>${lesson.completed ? 
+                            '<span class="stars">' + '⭐'.repeat(lesson.stars) + '</span>' : 
+                            '<span class="not-completed">Not completed</span>'}
+                        </span>
+                    </div>
+                `).join('')}
+                <h3>Test Scores</h3>
+                ${course.tests.map(test => `
+                    <div class="lesson-item">
+                        <span>${test.title}</span>
+                        <span class="score">${test.score}%</span>
+                    </div>
+                `).join('')}
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function showTimeDetails(index) {
+            const course = courseData[index];
+            const modal = document.getElementById('timeModal');
+            const content = document.getElementById('timeModalContent');
+            
+            content.innerHTML = `
+                <h2>${course.title} - Time Analysis</h2>
+                ${course.lessons.map((lesson, idx) => `
+                    <div class="lesson-item">
+                        <span>${lesson.title}</span>
+                        <span class="score">${course.timeSpent[idx]} minutes</span>
+                    </div>
+                `).join('')}
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize the dashboard
+        createCourseCards();
+        createTimeAnalysis();
+    </script>
+

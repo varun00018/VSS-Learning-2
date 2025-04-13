@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSS Learning - Leaderboard</title>
+    <style>
+       /* Global Styles */
+        :root {
+            --primary-color: #880E4F;
+            --secondary-color: #43002a;
+            --accent-color: #F39C12;
+            --light-text: white;
+            --border-radius: 12px;
+            --card-background: rgba(136, 14, 79, 0.9);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            min-height: 100vh;
+        }
+
+/* Navigation Bar */
+.nav-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform var(--transition-speed);
+            min-width: 200px;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            width: 30px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-grow: 1;
+            margin: 0 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-speed) ease-in-out;
+            white-space: nowrap;
+        }
+
+
+        .nav-links a:hover {
+            background-color: rgba(243, 156, 18, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-color);
+            background-color: rgba(243, 156, 18, 0.2);
+        }
+
+        .profile {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: white;
+            cursor: pointer;
+            transition: transform var(--transition-speed);
+            min-width: 35px;
+        }
+
+        .profile:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Leaderboard Header */
+.leaderboard-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.leaderboard-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--light-text);
+    margin-bottom: 15px;
+}
+
+.quote {
+    font-family: cursive;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 1rem;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-label {
+    font-weight: bold;
+    color: var(--light-text);
+}
+
+.filter-dropdown {
+    padding: 8px 15px;
+    background-color: var(--primary-color);
+    border: 2px solid transparent;
+    border-radius: 5px;
+    color: var(--light-text);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease-in-out;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) center;
+    padding-right: 30px;
+}
+
+.filter-dropdown:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.filter-dropdown option {
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+}
+
+/* Leaderboard Layout */
+.leaderboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+}
+
+@media (max-width: 992px) {
+    .leaderboard-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Leaderboard Table */
+.leaderboard-table-container {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    padding: 1.5rem;
+}
+
+.table-scroll-container {
+    max-height: 600px;
+    overflow-y: auto;
+    position: relative; /* Add this to create a stacking context */
+}
+
+table {
+    width: 100%;
+    border-collapse: separate; /* Change from collapse to separate */
+    border-spacing: 0; /* Maintain the same visual appearance */
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #43002a;
+    z-index: 10;
+}
+
+th {
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+    color: var(--light-text);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+tbody tr {
+    cursor: pointer;
+    position: relative;
+    transition: background-color var(--transition-speed);
+}
+
+tbody tr:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.rank-cell {
+    font-weight: 700;
+    color: var(--light-text);
+    width: 50px;
+    text-align: center;
+}
+
+tr:nth-child(1) .rank-cell {
+    color: #ffd700;  /* Gold */
+}
+
+tr:nth-child(2) .rank-cell {
+    color: #c0c0c0;  /* Silver */
+}
+
+tr:nth-child(3) .rank-cell {
+    color: #cd7f32;  /* Bronze */
+}
+/* Make the "you" row sticky at bottom of the visible table area */
+tbody tr.you {
+    position: sticky;
+    bottom: 0;
+    background-color: #43002a; /* Solid color matching your theme */
+    z-index: 10;
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.3); /* Adds separation from content */
+}
+tbody tr.you:hover {
+    background-color: #500133; /* Same solid color to prevent transparency on hover */
+}
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    transition: transform var(--transition-speed);
+}
+
+tr:hover .avatar {
+    transform: scale(1.1);
+}
+
+tr.you {
+    position: sticky;
+    background-color: rgba(0, 150, 136, 0.2);
+}
+
+/* Stats Panel */
+.stats-panel {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.stats-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ddd;
+    margin-right: 15px;
+}
+
+.stats-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--light-text);
+}
+
+.stats-subtitle {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    background-color: rgba(0,0,0,0.2);
+    padding: 12px;
+    border-radius: 8px;
+    transition: transform var(--transition-speed);
+}
+
+.stat-item:hover {
+    transform: translateY(-3px);
+    background-color: rgba(0,0,0,0.3);
+}
+
+.stat-label {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.view-profile-btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+.view-profile-btn:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--accent-color);
+}
+
+/* Profile Modal */
+.profile-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    position: relative;
+    background-color: var(--card-background);
+    margin: 5% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 800px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    color: var(--light-text);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--light-text);
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+}
+
+.close-modal:hover {
+    transform: scale(1.1);
+    color: var(--accent-color);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.modal-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ddd;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    color: var(--light-text);
+    margin-bottom: 0.25rem;
+}
+
+.modal-subtitle {
+    color: rgba(255,255,255,0.7);
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.stats-section h3, 
+.courses-section h3 {
+    font-size: 1.25rem;
+    color: var(--light-text);
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 0.5rem;
+}
+
+.full-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.courses-container {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.course-card {
+    display: flex;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    gap: 1rem;
+    align-items: center;
+    transition: transform var(--transition-speed);
+}
+
+.course-card:hover {
+    transform: translateY(-3px);
+    background-color: rgba(0,0,0,0.3);
+}
+
+.course-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.course-info {
+    flex-grow: 1;
+}
+
+.course-title {
+    font-size: 1rem;
+    color: var(--light-text);
+    margin-bottom: 0.5rem;
+}
+
+.course-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--accent-color);
+    border-radius: 4px;
+    width: 75%;
+}
+
+.progress-text {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+}
+
+.course-stats {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-wrap: wrap;
+        padding: 10px 15px;
+    }
+    
+    .logo {
+        margin-right: 20px;
+    }
+    
+    .nav-links {
+        order: 3;
+        width: 100%;
+        margin-top: 15px;
+        justify-content: space-between;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .leaderboard-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-panel {
+        width: 100%;
+        order: -1;
+    }
+    
+    .stats-grid, 
+    .full-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .stats-grid,
+    .full-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .course-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .modal-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+    </style>
+</head>
+<body>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>VSS Learning - Leaderboard</title>
+  </head>
+  <body>
+      <!-- Navigation Bar -->
+      <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="mycourse.html">My Courses</a>
+            <a href="Explorecourses.html">Explore Courses</a>
+            <a href="performance.html">Performance</a>
+            <a href="leaderboard.html" class="active">Leaderboard</a>
+            <a href="exam corner.html">Exam Corner</a>
+            <a href="community.html">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile"></div></a>
+    </div>
+      
+      <div class="container">
+          <!-- Leaderboard Header -->
+          <div class="leaderboard-header">
+              <p class="quote">"Compete with yourself, not with others. That's the key to true excellence."</p>
+              <h1 class="leaderboard-title">Leaderboard</h1>
+          </div>
+          
+          <!-- Filter Controls -->
+          <div class="filter-controls">
+              <div class="filter-group">
+                  <span class="filter-label">Ranking:</span>
+                  <select class="filter-dropdown" id="regionFilter">
+                      <option value="global">Global</option>
+                      <option value="country">Country</option>
+                      <option value="state">State</option>
+                      <option value="city">City</option>
+                  </select>
+              </div>
+              <div class="filter-group">
+                  <span class="filter-label">Grade:</span>
+                  <select class="filter-dropdown" id="gradeFilter">
+                      <option value="all">All Grades</option>
+                      <option value="1">Grade 1</option>
+                      <option value="2">Grade 2</option>
+                      <option value="3">Grade 3</option>
+                      <option value="4">Grade 4</option>
+                      <option value="5">Grade 5</option>
+                      <option value="6">Grade 6</option>
+                      <option value="7">Grade 7</option>
+                      <option value="8">Grade 8</option>
+                      <option value="9">Grade 9</option>
+                      <option value="10">Grade 10</option>
+                      <option value="11">Grade 11</option>
+                      <option value="12">Grade 12</option>
+                  </select>
+              </div>
+              <div class="filter-group">
+                  <span class="filter-label">Time Period:</span>
+                  <select class="filter-dropdown" id="timeFilter">
+                      <option value="all">All Time</option>
+                      <option value="thisMonth">This Month</option>
+                      <option value="thisWeek">This Week</option>
+                      <option value="today">Today</option>
+                  </select>
+              </div>
+          </div>
+          
+          <!-- Main Leaderboard Layout -->
+          <div class="leaderboard-layout">
+              <!-- Leaderboard Table -->
+              <div class="leaderboard-table-container">
+                  <div class="leaderboard-table">
+                      <div class="table-scroll-container">
+                          <table>
+                              <thead>
+                                  <tr>
+                                      <th>Rank</th>
+                                      <th>User</th>
+                                      <th>Region</th>
+                                      <th>XP</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="leaderboardBody">
+                                  <tr data-user="user1" onclick="showUserStats('user1', 'Alex Walker', 'Region 1')">
+                                      <td class="rank-cell">1</td>
+                                      <td><span class="avatar"></span>Alex Walker</td>
+                                      <td>Region 1</td>
+                                      <td>15,640</td>
+                                  </tr>
+                                  <tr data-user="user2" onclick="showUserStats('user2', 'Jamie Chen', 'Region 2')">
+                                      <td class="rank-cell">2</td>
+                                      <td><span class="avatar"></span>Jamie Chen</td>
+                                      <td>Region 2</td>
+                                      <td>14,892</td>
+                                  </tr>
+                                  <tr data-user="user3" onclick="showUserStats('user3', 'Taylor Singh', 'Region 3')">
+                                      <td class="rank-cell">3</td>
+                                      <td><span class="avatar"></span>Taylor Singh</td>
+                                      <td>Region 3</td>
+                                      <td>13,752</td>
+                                  </tr>
+                                  <tr data-user="user4" onclick="showUserStats('user4', 'Jesse Kim', 'Region 1')">
+                                      <td class="rank-cell">4</td>
+                                      <td><span class="avatar"></span>Jesse Kim</td>
+                                      <td>Region 1</td>
+                                      <td>12,945</td>
+                                  </tr>
+                                  <tr data-user="user5" onclick="showUserStats('user5', 'Morgan Patel', 'Region 4')">
+                                      <td class="rank-cell">5</td>
+                                      <td><span class="avatar"></span>Morgan Patel</td>
+                                      <td>Region 4</td>
+                                      <td>12,405</td>
+                                  </tr>
+                                  <tr data-user="user6" onclick="showUserStats('user6', 'Riley Johnson', 'Region 2')">
+                                      <td class="rank-cell">6</td>
+                                      <td><span class="avatar"></span>Riley Johnson</td>
+                                      <td>Region 2</td>
+                                      <td>11,875</td>
+                                  </tr>
+                                  <tr data-user="user7" onclick="showUserStats('user7', 'Avery Lopez', 'Region 3')">
+                                      <td class="rank-cell">7</td>
+                                      <td><span class="avatar"></span>Avery Lopez</td>
+                                      <td>Region 3</td>
+                                      <td>11,320</td>
+                                  </tr>
+                                  <tr data-user="user8" onclick="showUserStats('user8', 'Jordan Smith', 'Region 1')">
+                                      <td class="rank-cell">8</td>
+                                      <td><span class="avatar"></span>Jordan Smith</td>
+                                      <td>Region 1</td>
+                                      <td>10,980</td>
+                                  </tr>
+                                  <tr data-user="user9" onclick="showUserStats('user9', 'Quinn Davis', 'Region 5')">
+                                      <td class="rank-cell">9</td>
+                                      <td><span class="avatar"></span>Quinn Davis</td>
+                                      <td>Region 5</td>
+                                      <td>10,350</td>
+                                  </tr>
+                                  <tr data-user="user10" onclick="showUserStats('user10', 'Sam Wilson', 'Region 2')">
+                                      <td class="rank-cell">10</td>
+                                      <td><span class="avatar"></span>Sam Wilson</td>
+                                      <td>Region 2</td>
+                                      <td>9,980</td>
+                                  </tr>
+                                  <tr data-user="user11" onclick="showUserStats('user11', 'Casey Brown', 'Region 4')">
+                                      <td class="rank-cell">11</td>
+                                      <td><span class="avatar"></span>Casey Brown</td>
+                                      <td>Region 4</td>
+                                      <td>9,320</td>
+                                  </tr>
+                                  <tr data-user="user12" onclick="showUserStats('user12', 'Drew Garcia', 'Region 3')">
+                                      <td class="rank-cell">12</td>
+                                      <td><span class="avatar"></span>Drew Garcia</td>
+                                      <td>Region 3</td>
+                                      <td>8,950</td>
+                                  </tr>
+                                  <tr data-user="user13" onclick="showUserStats('user13', 'Rowan Miller', 'Region 1')">
+                                      <td class="rank-cell">13</td>
+                                      <td><span class="avatar"></span>Rowan Miller</td>
+                                      <td>Region 1</td>
+                                      <td>8,712</td>
+                                  </tr>
+                                  <tr data-user="user14" onclick="showUserStats('user14', 'Skyler Wright', 'Region 5')">
+                                      <td class="rank-cell">14</td>
+                                      <td><span class="avatar"></span>Skyler Wright</td>
+                                      <td>Region 5</td>
+                                      <td>8,320</td>
+                                  </tr>
+                                  <tr data-user="user15" onclick="showUserStats('user15', 'Kai Thomas', 'Region 2')">
+                                      <td class="rank-cell">15</td>
+                                      <td><span class="avatar"></span>Kai Thomas</td>
+                                      <td>Region 2</td>
+                                      <td>7,950</td>
+                                  </tr>
+                                  <tr data-user="user16" onclick="showUserStats('user16', 'Harper Lee', 'Region 3')">
+                                      <td class="rank-cell">16</td>
+                                      <td><span class="avatar"></span>Harper Lee</td>
+                                      <td>Region 3</td>
+                                      <td>7,540</td>
+                                  </tr>
+                                  <tr data-user="user17" onclick="showUserStats('user17', 'Finley Clark', 'Region 4')">
+                                      <td class="rank-cell">17</td>
+                                      <td><span class="avatar"></span>Finley Clark</td>
+                                      <td>Region 4</td>
+                                      <td>7,210</td>
+                                  </tr>
+                                  <tr data-user="user18" onclick="showUserStats('user18', 'Reese Murphy', 'Region 1')">
+                                      <td class="rank-cell">18</td>
+                                      <td><span class="avatar"></span>Reese Murphy</td>
+                                      <td>Region 1</td>
+                                      <td>6,920</td>
+                                  </tr>
+                                  <tr data-user="user19" onclick="showUserStats('user19', 'Bailey Hall', 'Region 5')">
+                                      <td class="rank-cell">19</td>
+                                      <td><span class="avatar"></span>Bailey Hall</td>
+                                      <td>Region 5</td>
+                                      <td>6,450</td>
+                                  </tr>
+                                  <tr class="you" data-user="you" onclick="showUserStats('you', 'You', 'Your Region')">
+                                      <td class="rank-cell">25</td>
+                                      <td><span class="avatar"></span>You</td>
+                                      <td>Your Region</td>
+                                      <td>6,120</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- Simplified Stats Panel -->
+              <div class="stats-panel" id="statsPanel">
+                  <div class="stats-header">
+                      <div class="stats-avatar" id="statsAvatar"></div>
+                      <div>
+                          <div class="stats-title" id="statsName">Your Stats</div>
+                          <div class="stats-subtitle" id="statsRegion">Your Region</div>
+                      </div>
+                  </div>
+                  <div class="stats-grid">
+                      <div class="stat-item">
+                          <div class="stat-label">XP Collected</div>
+                          <div class="stat-value" id="xpCollected">6,120</div>
+                      </div>
+                      <div class="stat-item">
+                          <div class="stat-label">Stars Collected</div>
+                          <div class="stat-value" id="starsCollected">200</div>
+                      </div>
+                      <div class="stat-item">
+                          <div class="stat-label">Problems Solved</div>
+                          <div class="stat-value" id="problemsSolved">95</div>
+                      </div>
+                      <div class="stat-item">
+                          <div class="stat-label">Current Streak</div>
+                          <div class="stat-value" id="currentStreak">1 day</div>
+                      </div>
+                  </div>
+                  <button id="viewFullProfile" class="view-profile-btn" onclick="openProfileModal()">View Full Profile</button>
+              </div>
+          </div>
+      </div>
+  
+      <!-- Profile Modal -->
+      <div id="profileModal" class="profile-modal">
+          <div class="modal-content">
+              <span class="close-modal" onclick="closeProfileModal()">&times;</span>
+              <div class="modal-header">
+                  <div class="modal-avatar" id="modalAvatar"></div>
+                  <div>
+                      <h2 class="modal-title" id="modalName">User Profile</h2>
+                      <p class="modal-subtitle" id="modalRegion">Region</p>
+                  </div>
+              </div>
+              <div class="modal-body">
+                  <div class="stats-section">
+                      <h3>Performance Stats</h3>
+                      <div class="full-stats-grid">
+                          <div class="stat-item">
+                              <div class="stat-label">XP Collected</div>
+                              <div class="stat-value" id="modalXpCollected">0</div>
+                          </div>
+                          <div class="stat-item">
+                              <div class="stat-label">Stars Collected</div>
+                              <div class="stat-value" id="modalStarsCollected">0</div>
+                          </div>
+                          <div class="stat-item">
+                              <div class="stat-label">Gems Collected</div>
+                              <div class="stat-value" id="modalGemsCollected">0</div>
+                          </div>
+                          <div class="stat-item">
+                              <div class="stat-label">Problems Solved</div>
+                              <div class="stat-value" id="modalProblemsSolved">0</div>
+                          </div>
+                          <div class="stat-item">
+                              <div class="stat-label">Current Streak</div>
+                              <div class="stat-value" id="modalCurrentStreak">0</div>
+                          </div>
+                          <div class="stat-item">
+                              <div class="stat-label">Longest Streak</div>
+                              <div class="stat-value" id="modalLongestStreak">0</div>
+                          </div>
+                          <div class="stat-item">
+                              <div class="stat-label">Highest Rank</div>
+                              <div class="stat-value" id="modalHighestRank">0</div>
+                          </div>
+                          <div class="stat-item">
+                              <div class="stat-label">Badges Earned</div>
+                              <div class="stat-value" id="modalBadgesEarned">0</div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="courses-section">
+                      <h3>Top Courses</h3>
+                      <div class="courses-container" id="topCoursesContainer">
+                          <div class="course-card">
+                              <div class="course-icon"></div>
+                              <div class="course-info">
+                                  <h4 class="course-title" id="courseTitle1">Course Title</h4>
+                                  <div class="course-progress">
+                                      <div class="progress-bar">
+                                          <div class="progress-fill" id="courseProgress1"></div>
+                                      </div>
+                                      <span class="progress-text" id="courseProgressText1">0%</span>
+                                  </div>
+                                  <p class="course-stats" id="courseStats1">0 XP earned | 0 problems solved</p>
+                              </div>
+                          </div>
+                          <div class="course-card">
+                              <div class="course-icon"></div>
+                              <div class="course-info">
+                                  <h4 class="course-title" id="courseTitle2">Course Title</h4>
+                                  <div class="course-progress">
+                                      <div class="progress-bar">
+                                          <div class="progress-fill" id="courseProgress2"></div>
+                                      </div>
+                                      <span class="progress-text" id="courseProgressText2">0%</span>
+                                  </div>
+                                  <p class="course-stats" id="courseStats2">0 XP earned | 0 problems solved</p>
+                              </div>
+                          </div>
+                          <div class="course-card">
+                              <div class="course-icon"></div>
+                              <div class="course-info">
+                                  <h4 class="course-title" id="courseTitle3">Course Title</h4>
+                                  <div class="course-progress">
+                                      <div class="progress-bar">
+                                          <div class="progress-fill" id="courseProgress3"></div>
+                                      </div>
+                                      <span class="progress-text" id="courseProgressText3">0%</span>
+                                  </div>
+                                  <p class="course-stats" id="courseStats3">0 XP earned | 0 problems solved</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </body>
+  </html>
+    <script>
+        // Sample user data
+        // User data from provided dataset
+const userData = {
+    "user1": {
+        gemsCollected: "2,875",
+        starsCollected: "594",
+        problemsSolved: "287",
+        highestRank: "1",
+        currentStreak: "32 days",
+        xpCollected: "15,640",
+        longestStreak: "45 days",
+        badgesEarned: "27"
+    },
+    "user2": {
+        gemsCollected: "2,653",
+        starsCollected: "561",
+        problemsSolved: "264",
+        highestRank: "1",
+        currentStreak: "24 days",
+        xpCollected: "14,892",
+        longestStreak: "38 days",
+        badgesEarned: "25"
+    },
+    "user3": {
+        gemsCollected: "2,412",
+        starsCollected: "522",
+        problemsSolved: "243",
+        highestRank: "2",
+        currentStreak: "18 days",
+        xpCollected: "13,752",
+        longestStreak: "32 days",
+        badgesEarned: "23"
+    },
+    "user4": {
+        gemsCollected: "2,145",
+        starsCollected: "487",
+        problemsSolved: "227",
+        highestRank: "3",
+        currentStreak: "14 days",
+        xpCollected: "12,945",
+        longestStreak: "29 days",
+        badgesEarned: "22"
+    },
+    "user5": {
+        gemsCollected: "2,056",
+        starsCollected: "465",
+        problemsSolved: "219",
+        highestRank: "4",
+        currentStreak: "21 days",
+        xpCollected: "12,405",
+        longestStreak: "30 days",
+        badgesEarned: "21"
+    },
+    "user6": {
+        gemsCollected: "1,985",
+        starsCollected: "440",
+        problemsSolved: "205",
+        highestRank: "5",
+        currentStreak: "19 days",
+        xpCollected: "11,875",
+        longestStreak: "28 days",
+        badgesEarned: "20"
+    },
+    "user7": {
+        gemsCollected: "1,823",
+        starsCollected: "421",
+        problemsSolved: "198",
+        highestRank: "6",
+        currentStreak: "16 days",
+        xpCollected: "11,320",
+        longestStreak: "25 days",
+        badgesEarned: "19"
+    },
+    "user8": {
+        gemsCollected: "1,780",
+        starsCollected: "399",
+        problemsSolved: "190",
+        highestRank: "7",
+        currentStreak: "15 days",
+        xpCollected: "10,980",
+        longestStreak: "24 days",
+        badgesEarned: "18"
+    },
+    "user9": {
+        gemsCollected: "1,650",
+        starsCollected: "380",
+        problemsSolved: "175",
+        highestRank: "8",
+        currentStreak: "12 days",
+        xpCollected: "10,350",
+        longestStreak: "22 days",
+        badgesEarned: "17"
+    },
+    "user10": {
+        gemsCollected: "1,590",
+        starsCollected: "370",
+        problemsSolved: "170",
+        highestRank: "9",
+        currentStreak: "11 days",
+        xpCollected: "9,980",
+        longestStreak: "20 days",
+        badgesEarned: "16"
+    },
+    "user11": {
+        gemsCollected: "1,450",
+        starsCollected: "350",
+        problemsSolved: "160",
+        highestRank: "10",
+        currentStreak: "9 days",
+        xpCollected: "9,320",
+        longestStreak: "18 days",
+        badgesEarned: "15"
+    },
+    "user12": {
+        gemsCollected: "1,320",
+        starsCollected: "340",
+        problemsSolved: "150",
+        highestRank: "11",
+        currentStreak: "8 days",
+        xpCollected: "8,950",
+        longestStreak: "16 days",
+        badgesEarned: "14"
+    },
+    "user13": {
+        gemsCollected: "1,245",
+        starsCollected: "320",
+        problemsSolved: "142",
+        highestRank: "12",
+        currentStreak: "7 days",
+        xpCollected: "8,712",
+        longestStreak: "14 days",
+        badgesEarned: "13"
+    },
+    "user14": {
+        gemsCollected: "1,190",
+        starsCollected: "300",
+        problemsSolved: "136",
+        highestRank: "13",
+        currentStreak: "6 days",
+        xpCollected: "8,320",
+        longestStreak: "13 days",
+        badgesEarned: "12"
+    },
+    "user15": {
+        gemsCollected: "1,130",
+        starsCollected: "280",
+        problemsSolved: "129",
+        highestRank: "14",
+        currentStreak: "5 days",
+        xpCollected: "7,950",
+        longestStreak: "12 days",
+        badgesEarned: "11"
+    },
+    "user16": {
+        gemsCollected: "1,080",
+        starsCollected: "260",
+        problemsSolved: "120",
+        highestRank: "15",
+        currentStreak: "4 days",
+        xpCollected: "7,540",
+        longestStreak: "11 days",
+        badgesEarned: "10"
+    },
+    "user17": {
+        gemsCollected: "1,050",
+        starsCollected: "250",
+        problemsSolved: "115",
+        highestRank: "16",
+        currentStreak: "3 days",
+        xpCollected: "7,210",
+        longestStreak: "10 days",
+        badgesEarned: "9"
+    },
+    "user18": {
+        gemsCollected: "980",
+        starsCollected: "230",
+        problemsSolved: "110",
+        highestRank: "17",
+        currentStreak: "2 days",
+        xpCollected: "6,920",
+        longestStreak: "9 days",
+        badgesEarned: "8"
+    },
+    "user19": {
+        gemsCollected: "910",
+        starsCollected: "210",
+        problemsSolved: "100",
+        highestRank: "18",
+        currentStreak: "2 days",
+        xpCollected: "6,450",
+        longestStreak: "8 days",
+        badgesEarned: "7"
+    },
+    "you": {
+        gemsCollected: "875",
+        starsCollected: "200",
+        problemsSolved: "95",
+        highestRank: "19",
+        currentStreak: "1 day",
+        xpCollected: "6,120",
+        longestStreak: "7 days",
+        badgesEarned: "6"
+    }
+};
+
+// Sample course data (since it's not in the provided dataset)
+const coursesData = {
+    "user1": [
+        { title: "Advanced Mathematics", progress: 95, xp: 8240, problems: 140 },
+        { title: "Physics Fundamentals", progress: 85, xp: 4920, problems: 85 },
+        { title: "Computer Science Basics", progress: 98, xp: 2480, problems: 62 }
+    ],
+    "user2": [
+        { title: "Chemistry Advanced", progress: 92, xp: 7840, problems: 125 },
+        { title: "Algebra Master", progress: 88, xp: 4560, problems: 90 },
+        { title: "Biology Concepts", progress: 85, xp: 2492, problems: 49 }
+    ],
+    "you": [
+        { title: "Introduction to Algebra", progress: 65, xp: 2540, problems: 45 },
+        { title: "Basic Science", progress: 48, xp: 1980, problems: 30 },
+        { title: "Reading Comprehension", progress: 75, xp: 1600, problems: 20 }
+    ]
+};
+
+// Default to showing user's own stats on load
+window.onload = function() {
+    showUserStats('you', 'You', 'Your Region');
+};
+
+// Function to show user stats in the side panel
+function showUserStats(userId, name, region) {
+    // Get user data or default to empty object if not found
+    const user = userData[userId] || {};
+    
+    // Update stats panel
+    document.getElementById('statsName').textContent = name;
+    document.getElementById('statsRegion').textContent = region;
+    document.getElementById('xpCollected').textContent = user.xpCollected || "0";
+    document.getElementById('starsCollected').textContent = user.starsCollected || "0";
+    document.getElementById('problemsSolved').textContent = user.problemsSolved || "0";
+    document.getElementById('currentStreak').textContent = user.currentStreak || "0 days";
+    
+    // Highlight selected row
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => row.classList.remove('selected'));
+    document.querySelector(`tr[data-user="${userId}"]`)?.classList.add('selected');
+    
+    // Store selected user ID for modal
+    document.getElementById('viewFullProfile').setAttribute('data-user', userId);
+}
+
+// Function to open the profile modal
+function openProfileModal() {
+    const userId = document.getElementById('viewFullProfile').getAttribute('data-user');
+    const user = userData[userId] || {};
+    
+    // Get user name and region from the table
+    const userRow = document.querySelector(`tr[data-user="${userId}"]`);
+    const userName = userRow ? userRow.querySelector('td:nth-child(2)').textContent.trim() : "User";
+    const userRegion = userRow ? userRow.querySelector('td:nth-child(3)').textContent.trim() : "Region";
+    
+    // Update modal header
+    document.getElementById('modalName').textContent = userName;
+    document.getElementById('modalRegion').textContent = userRegion;
+    
+    // Update detailed stats
+    document.getElementById('modalXpCollected').textContent = user.xpCollected || "0";
+    document.getElementById('modalStarsCollected').textContent = user.starsCollected || "0";
+    document.getElementById('modalGemsCollected').textContent = user.gemsCollected || "0";
+    document.getElementById('modalProblemsSolved').textContent = user.problemsSolved || "0";
+    document.getElementById('modalCurrentStreak').textContent = user.currentStreak || "0 days";
+    document.getElementById('modalLongestStreak').textContent = user.longestStreak || "0 days";
+    document.getElementById('modalHighestRank').textContent = user.highestRank || "N/A";
+    document.getElementById('modalBadgesEarned').textContent = user.badgesEarned || "0";
+    
+    // Update courses information
+    const courses = coursesData[userId] || getDefaultCourses();
+    for (let i = 0; i < 3; i++) {
+        const course = courses[i] || { title: "No Course", progress: 0, xp: 0, problems: 0 };
+        
+        document.getElementById(`courseTitle${i+1}`).textContent = course.title;
+        document.getElementById(`courseProgress${i+1}`).style.width = `${course.progress}%`;
+        document.getElementById(`courseProgressText${i+1}`).textContent = `${course.progress}%`;
+        document.getElementById(`courseStats${i+1}`).textContent = 
+            `${course.xp?.toLocaleString() || 0} XP earned | ${course.problems} problems solved`;
+    }
+    
+    // Show the modal
+    document.getElementById('profileModal').style.display = 'block';
+    
+    // Add event listener to close modal when clicking outside
+    document.getElementById('profileModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeProfileModal();
+        }
+    });
+    
+    // Add event listener for escape key
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+// Helper function to generate default courses when not available
+function getDefaultCourses() {
+    // Generate random courses based on user rank
+    return [
+        { title: "General Course 1", progress: Math.floor(Math.random() * 100), xp: Math.floor(Math.random() * 2000), problems: Math.floor(Math.random() * 50) + 10 },
+        { title: "General Course 2", progress: Math.floor(Math.random() * 100), xp: Math.floor(Math.random() * 2000), problems: Math.floor(Math.random() * 50) + 10 },
+        { title: "General Course 3", progress: Math.floor(Math.random() * 100), xp: Math.floor(Math.random() * 2000), problems: Math.floor(Math.random() * 50) + 10 }
+    ];
+}
+
+// Function to close the profile modal
+function closeProfileModal() {
+    document.getElementById('profileModal').style.display = 'none';
+    
+    // Remove escape key event listener
+    document.removeEventListener('keydown', handleEscapeKey);
+}
+
+// Function to handle escape key press
+function handleEscapeKey(event) {
+    if (event.key === "Escape") {
+        closeProfileModal();
+    }
+}
+
+// Add click event listeners to all rows when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers for table rows
+    const leaderboardRows = document.querySelectorAll('#leaderboardBody tr');
+    leaderboardRows.forEach(row => {
+        const userId = row.getAttribute('data-user');
+        if (userId) {
+            row.addEventListener('click', function() {
+                const name = this.querySelector('td:nth-child(2)').textContent.trim();
+                const region = this.querySelector('td:nth-child(3)').textContent.trim();
+                showUserStats(userId, name, region);
+            });
+        }
+    });
+    
+    // Add CSS for selected row if not already in stylesheet
+    if (!document.querySelector('style#leaderboard-styles')) {
+        const style = document.createElement('style');
+        style.id = 'leaderboard-styles';
+        // style.textContent = `
+        //     tr.selected {
+        //         background-color: rgba(74, 108, 247, 0.1) !important;
+        //         font-weight: 500;
+        //     }
+        //     tr.selected td {
+        //         border-bottom-color: rgba(74, 108, 247, 0.3);
+        //     }
+        // `;
+        document.head.appendChild(style);
+    }
+    
+    // Add click event listener to view profile button
+    document.getElementById('viewFullProfile').addEventListener('click', openProfileModal);
+});
+    </script>
+</body>
+</html>

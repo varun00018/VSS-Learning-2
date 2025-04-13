@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem of the Day</title>
+    <style>
+        /* ... Previous styles remain same until completion-screen ... */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #5A0D50;
+            color: #E0E0E0;
+        }
+
+        .header {
+            background-color: #8B0A50;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .timer {
+            background-color: #3B0D39;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            color: #B0B0B0;
+        }
+
+        .points {
+            display: flex;
+            gap: 15px;
+        }
+
+        .point-item {
+            background-color: #3B0D39;
+            padding: 8px 15px;
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #3B0D39;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background-color: #8B0A50;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #C2185B;
+        }
+
+        .option.selected {
+            background-color: #C2185B;
+        }
+
+        .submit-btn, .retry-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 15px;
+            background-color: #C2185B;
+            color: #E0E0E0;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:disabled {
+            background-color: #B0B0B0;
+            cursor: not-allowed;
+        }
+
+        .close-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #8B0A50;
+            color: #E0E0E0;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.success {
+            background-color: #27ae60;
+        }
+
+        .feedback.error {
+            background-color: #D35400;
+        }
+
+        /* Updated completion screen styles for overlay */
+        .completion-screen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #3B0D39;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .completion-screen.active {
+            display: block;
+        }
+
+        .checkmark {
+            color: #27ae60;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .completion-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .completion-message {
+            color: #B0B0B0;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Updated modal styles for retry prompt */
+        .retry-modal {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #3B0D39;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 20;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .retry-modal.active {
+            display: block;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+
+        .modal-button.confirm {
+            background-color: #C2185B;
+        }
+
+        .modal-button.cancel {
+            background-color: #8B0A50;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 15;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Problem of the Day</div>
+        <div class="timer">Next question in: 02:40:34</div>
+        <div class="points">
+            <div class="point-item">💎 55</div>
+            <div class="point-item">⭐ 125 XP</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="question-container">
+            <div class="question">Which data structure is best for implementing undo/redo?</div>
+            <div class="options">
+                <div class="option" data-value="array">Array</div>
+                <div class="option" data-value="stack">Stack</div>
+                <div class="option" data-value="queue">Queue</div>
+                <div class="option" data-value="tree">Tree</div>
+            </div>
+            <div class="feedback"></div>
+            <button class="submit-btn" disabled>Submit Answer</button>
+            <button class="close-btn">Close</button>
+        </div>
+
+        <div class="completion-screen">
+            <div class="checkmark">✓</div>
+            <div class="completion-title">You've completed today's problem!</div>
+            <div class="completion-message">
+                Great job! You've already tackled today's challenge. Come back tomorrow for a new problem to solve.
+            </div>
+            <div class="timer">Next question in: 02:40:34</div>
+            <button class="close-btn">Close</button>
+        </div>
+
+        <div class="retry-modal">
+            <h2>Would you like to retry?</h2>
+            <p>Spend 10 💎 to try the question again</p>
+            <div class="modal-buttons">
+                <button class="modal-button confirm" onclick="retryQuestion()">Yes (10 💎)</button>
+                <button class="modal-button cancel" onclick="continueAttempt()">No, continue</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+
+    <script>
+        let attempts = 0;
+let gems = 55;
+let xp = 125;
+const correctAnswer = 'stack';
+let selectedOption = null;
+const RETRY_COST = 10;
+const REWARDS = {
+    firstTry: { gems: 20, xp: 50 },
+    secondTry: { gems: 20, xp: 50 }
+};
+
+const options = document.querySelectorAll('.option');
+const submitBtn = document.querySelector('.submit-btn');
+const closeButtons = document.querySelectorAll('.close-btn');
+const feedback = document.querySelector('.feedback');
+const completionScreen = document.querySelector('.completion-screen');
+const retryModal = document.querySelector('.retry-modal');
+const overlay = document.querySelector('.overlay');
+const gemsDisplay = document.querySelector('.points .point-item:first-child');
+const xpDisplay = document.querySelector('.points .point-item:last-child');
+
+function updatePoints(gemsChange, xpChange) {
+    gems += gemsChange;
+    xp += xpChange;
+    gemsDisplay.textContent = `💎 ${gems}`;
+    xpDisplay.textContent = `⭐ ${xp} XP`;
+}
+
+function resetQuestion() {
+    selectedOption = null;
+    submitBtn.disabled = true;
+    feedback.style.display = 'none';
+    options.forEach(opt => opt.classList.remove('selected'));
+    retryModal.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+function showCompletion() {
+    completionScreen.classList.add('active');
+}
+
+function showRetryModal() {
+    retryModal.classList.add('active');
+    overlay.classList.add('active');
+}
+
+function showFeedback(isCorrect, message) {
+    feedback.textContent = message;
+    feedback.className = `feedback ${isCorrect ? 'success' : 'error'}`;
+    feedback.style.display = 'block';
+}
+
+function retryQuestion() {
+    if (gems >= RETRY_COST) {
+        updatePoints(-RETRY_COST, 0); // Deduct retry cost
+        resetQuestion();
+    } else {
+        alert('Not enough gems!');
+    }
+}
+
+function continueAttempt() {
+    retryModal.classList.remove('active');
+    overlay.classList.remove('active');
+    setTimeout(showCompletion, 500);
+}
+
+function handleCorrectAnswer() {
+    const reward = attempts === 1 ? REWARDS.firstTry : REWARDS.secondTry;
+    showFeedback(true, `Correct! +${reward.gems} 💎 +${reward.xp} ⭐`);
+    updatePoints(reward.gems, reward.xp);
+    setTimeout(showCompletion, 1500);
+}
+
+function handleWrongAnswer() {
+    showFeedback(false, "Wrong answer!");
+    
+    if (attempts === 1) {
+        setTimeout(showRetryModal, 1500);
+    } else {
+        setTimeout(showCompletion, 1500);
+    }
+}
+
+// Add click handlers for all options
+options.forEach(option => {
+    option.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedOption = option.dataset.value;
+        submitBtn.disabled = false;
+    });
+});
+
+// Handle submit button click
+submitBtn.addEventListener('click', () => {
+    attempts++;
+    
+    if (selectedOption === correctAnswer) {
+        handleCorrectAnswer();
+    } else if (attempts <= 2) {
+        handleWrongAnswer();
+    }
+});
+
+// Handle all close buttons
+closeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        window.location.href = "dashboard.html";
+    });
+});
+    </script>
+</body>
+</html>

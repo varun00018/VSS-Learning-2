@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSS Learning Platform - Exam Corner</title>
+    <style>
+        :root {
+            --primary-color: #880E4F;
+            --secondary-color: #43002a;
+            --accent-color: #F39C12;
+            --light-text: white;
+            --border-radius: 12px;
+            --card-background: rgba(136, 14, 79, 0.9);
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            min-height: 100vh;
+        }
+        .nav-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform var(--transition-speed);
+    min-width: 200px;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo img {
+    width: 30px;
+    margin-right: 10px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-grow: 1;
+    margin: 0 40px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--light-text);
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease-in-out;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    background-color: rgba(243, 156, 18, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-links a.active {
+    color: var(--accent-color);
+    background-color: rgba(243, 156, 18, 0.2);
+}
+
+.profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+    min-width: 35px;
+}
+
+.profile:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .exam-corner {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .exam-corner h2 {
+            color: var(--light-text);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 768px) {
+            .content-grid {
+                grid-template-columns: 2fr 3fr;
+            }
+        }
+
+        .status-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .status-button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 20px;
+        background-color: rgba(0, 0, 0, 0.2);
+        border: 2px solid transparent;
+        border-radius: var(--border-radius);
+        color: var(--light-text);
+        cursor: pointer;
+        transition: all var(--transition-speed);
+        width: 100%;
+        text-align: left;
+    }
+    .status-button .section-title {
+        font-size: 1.4rem;  /* Increased font size */
+        font-weight: 600;
+    }
+    .test-section {
+        margin-bottom: 30px;
+    }
+
+    .test-section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .test-section-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--light-text);
+    }
+
+    .section-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Hide test sections when filtered */
+    .test-section.hidden {
+        display: none;
+    }
+        .status-button:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .status-button.active {
+            border-color: var(--accent-color);
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .badge-ongoing {
+            background-color: #F39C12;
+            color: #fff;
+        }
+
+        .badge-upcoming {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .badge-completed {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .test-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .test-item {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-speed);
+        }
+
+        .test-item:hover {
+            transform: translateY(-3px);
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .test-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .test-name {
+            font-weight: 500;
+            color: var(--light-text);
+            font-size: 1.1rem;
+        }
+
+        .test-date {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .take-test-button {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .take-test-button:hover {
+            background-color: #f3c212;
+            transform: scale(1.05);
+        }
+
+        .take-test-button.completed{
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
+            cursor: not-allowed;
+        }
+        .test-section[data-status="upcoming"] .take-test-button {
+            background-color: #6c757d;  /* Grey color for upcoming tests */
+            color: var(--light-text);
+            cursor: not-allowed;
+        }
+
+        .test-section[data-status="upcoming"] .take-test-button:hover {
+            background-color: #5a6268;  /* Darker grey on hover */
+            transform: none;  /* Remove the scale effect */
+        }
+        @media (max-width: 768px) {
+            .nav-bar {
+        flex-wrap: wrap;
+        padding: 10px 15px;
+    }
+    
+    .logo {
+        margin-right: 20px;
+    }
+    
+    .nav-links {
+        order: 3;
+        width: 100%;
+        margin-top: 15px;
+        justify-content: space-between;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+            
+            .test-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .take-test-button {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="mycourse.html">My Courses</a>
+            <a href="Explorecourses.html">Explore Courses</a>
+            <a href="performance.html">Performance</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="exam corner.html" class="active">Exam Corner</a>
+            <a href="community.html">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile"></div></a>
+    </div>
+
+    <main class="main-content">
+      <div class="exam-corner">
+          <h2>Exam Corner</h2>
+          <div class="content-grid">
+              <div class="status-column">
+                  <button class="status-button" data-status="all">
+                      <span class="badge badge-upcoming">All Tests</span>
+                      <span class="section-title">View All</span>
+                  </button>
+                  <button class="status-button" data-status="ongoing">
+                      <span class="badge badge-ongoing">Ongoing</span>
+                      <span class="section-title">Currently Active</span>
+                  </button>
+                  <button class="status-button" data-status="upcoming">
+                      <span class="badge badge-upcoming">Upcoming</span>
+                      <span class="section-title">Scheduled</span>
+                  </button>
+                  <button class="status-button" data-status="completed">
+                      <span class="badge badge-completed">Completed</span>
+                      <span class="section-title">Past Exams</span>
+                  </button>
+              </div>
+              <div class="test-list" id="testList">
+                  <!-- Test sections will be inserted here -->
+              </div>
+          </div>
+      </div>
+  </main>
+
+    <script>
+        // Sample test data
+        const testData = {
+            ongoing: [
+                { id: 1, name: 'Machine Learning Midterm', date: '2025-02-22 14:00', duration: '2 hours' },
+                { id: 2, name: 'Data Structures Quiz', date: '2025-02-22 16:30', duration: '1.5 hours' }
+            ],
+            upcoming: [
+                { id: 3, name: 'Algorithm Analysis Final', date: '2025-02-25 10:00', duration: '3 hours' },
+                { id: 4, name: 'Database Systems Quiz', date: '2025-02-26 13:00', duration: '1 hour' },
+                { id: 5, name: 'Web Development Test', date: '2025-02-27 15:00', duration: '2 hours' }
+            ],
+            completed: [
+                { id: 6, name: 'Python Programming', date: '2025-02-20 09:00', score: '92%' },
+                { id: 7, name: 'Computer Networks', date: '2025-02-19 11:00', score: '88%' },
+                { id: 8, name: 'Operating Systems', date: '2025-02-18 14:00', score: '95%' }
+            ]
+        };
+        function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function renderTestSection(status, tests) {
+        const badgeClass = `badge-${status}`;
+        const statusTitle = status.charAt(0).toUpperCase() + status.slice(1);
+        
+        return `
+            <div class="test-section" data-status="${status}">
+                <div class="test-section-header">
+                    <span class="section-badge ${badgeClass}">${statusTitle}</span>
+                    <h3 class="test-section-title">${statusTitle} Tests</h3>
+                </div>
+                <div class="test-items">
+                    ${tests.map(test => `
+                        <div class="test-item">
+                            <div class="test-info">
+                                <div class="test-name">${test.name}</div>
+                                <div class="test-date">
+                                    ${status === 'completed'
+                                        ? `Completed: ${formatDate(test.date)} - Score: ${test.score}`
+                                        : `${formatDate(test.date)} - ${test.duration}`}
+                                </div>
+                            </div>
+                            <button class="take-test-button ${status === 'completed' ? 'completed' : ''}" 
+                                    ${status === 'completed' || status === 'upcoming' ? 'disabled' : `onclick="startTest(${test.id})"`}>
+                                ${status === 'completed' ? 'Completed' : 'Start Test'}
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    function updateTestList(filterStatus = 'all') {
+        const testList = document.getElementById('testList');
+        
+        if (filterStatus === 'all') {
+            // Show all test sections
+            testList.innerHTML = 
+                renderTestSection('ongoing', testData.ongoing) +
+                renderTestSection('upcoming', testData.upcoming) +
+                renderTestSection('completed', testData.completed);
+        } else {
+            // Show only filtered section
+            testList.innerHTML = renderTestSection(filterStatus, testData[filterStatus]);
+        }
+    }
+
+    function startTest(testId) {
+        alert(`Starting test ${testId}`);
+    }
+
+    // Add click handlers for status buttons
+    document.querySelectorAll('.status-button').forEach(button => {
+        button.addEventListener('click', () => {
+            // Update active state
+            document.querySelectorAll('.status-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            // Update test list
+            updateTestList(button.dataset.status);
+        });
+    });
+
+    // Initialize with all tests
+    document.querySelector('[data-status="all"]').classList.add('active');
+    updateTestList('all');
+    </script>
+</body>
+</html>

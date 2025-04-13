@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Explorer</title>
+    <style>
+        :root {
+    --primary-bg: #880E4F;
+    --secondary-bg: #43002a;
+    --interactive: #880E4F;
+    --accent-orange: #F39C12;
+    --accent-yellow: #F39C12;
+    --text-primary: white;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --transition-speed: 0.3s;
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.quote-section {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--secondary-bg);
+}
+
+.quote {
+    font-family:cursive;;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+}
+
+.main-title {
+    font-size: 3rem;
+    margin: 2rem 0;
+    background: linear-gradient(45deg, var(--primary-bg), var(--accent-yellow));
+    background-clip: var(--accent-yellow);
+    -moz-background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGlow 2s infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { opacity: 0.8; }
+    to { opacity: 1; }
+}
+
+.filter-section {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    position: relative;
+    display: flex;
+    gap: 1rem;
+}
+
+.search-bar {
+    flex-grow: 1;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--secondary-bg);
+    border-radius: 25px;
+    background-color: rgba(67, 0, 42, 0.1);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.search-bar:focus {
+    border-color: var(--interactive);
+    box-shadow: 0 0 15px rgba(136, 14, 79, 0.3);
+}
+
+.search-bar::placeholder {
+    color: var(--text-secondary);
+}
+
+.category-dropdown {
+    position: relative;
+    min-width: 200px;
+}
+
+.category-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--secondary-bg);
+    border-radius: 25px;
+    background-color: rgba(67, 0, 42, 0.1);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.category-btn:hover {
+    border-color: var(--interactive);
+}
+
+.category-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    z-index: 1000;
+}
+
+.category-content.show {
+    display: block;
+}
+
+.category-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.category-item:hover {
+    background-color: var(--interactive);
+}
+
+.category-item.active {
+    background-color: var(--interactive);
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-btn:hover {
+    background-color: var(--interactive);
+}
+
+.filter-btn.active {
+    background-color: var(--interactive);
+}
+
+.grade-dropdown {
+    display: none;
+    position: absolute;
+    background-color: var(--secondary-bg);
+    padding: 1rem;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.grade-dropdown.show {
+    display: block;
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.course-card {
+    background-color: var(--secondary-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+}
+
+.join-btn {
+    background-color: var(--interactive);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+}
+
+.modal-content {
+    position: relative;
+    background-color: var(--secondary-bg);
+    margin: 10% auto;
+    padding: 2rem;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.page-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.page-btn.active {
+    background-color: var(--interactive);
+}
+
+.domain-filter {
+    width: 100%;
+    max-width: 600px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+
+.domain-btn {
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.domain-btn:hover {
+    background-color: var(--interactive);
+    transform: translateY(-2px);
+}
+
+.domain-btn.active {
+    background-color: var(--interactive);
+    box-shadow: 0 0 10px rgba(136, 14, 79, 0.3);
+}
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--primary-bg);
+    padding: 15px 30px;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform var(--transition-speed);
+    min-width: 200px;
+} 
+.logo:hover {
+    transform: scale(1.05);
+}
+        
+.logo img {
+    width: 30px;
+    margin-right: 10px;
+}
+.nav-links {
+    display: flex;
+    align-items: center;
+    border-radius: var(--border-radius);
+    gap: 30px;
+    flex-grow: 1;
+    margin: 0 40px;
+}
+.nav-links a {
+    text-decoration: none;
+    color: var(--light-text);
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease-in-out;
+    white-space: nowrap;
+}
+.nav-links a:hover {
+    background-color: rgba(243, 156, 18, 0.1);
+    transform: translateY(-2px);
+}
+.nav-links a.active1 {
+    color: var(--accent-orange);
+    background-color: rgba(243, 156, 18, 0.2);
+}
+.profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+    min-width: 35px;
+}
+.profile:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+.profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+}
+.category-btn:hover {
+    border-color: #880E4F;
+}
+
+.category-item:hover {
+    background-color: #880E4F;
+}
+
+.filter-btn:hover {
+    background-color: #880E4F;
+}
+
+.nav-links a:hover {
+    color: #F39C12;
+    text-decoration: none;
+}
+
+.join-btn:hover {
+    background-color: #F39C12;
+}
+
+.domain-btn:hover {
+    background-color: #880E4F;
+    transform: translateY(-2px);
+}
+
+.course-card:hover {
+    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+}
+
+.page-btn:hover {
+    background-color: #880E4F;
+}
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="mycourse.html">My Courses</a>
+            <a href="Explorecourses.html" class="active1">Explore Courses</a>
+            <a href="performance.html">Performance</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="exam corner.html">Exam Corner</a>
+            <a href="community.html">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile"></div></a>
+    </div>
+    <div class="quote-section">
+        <p class="quote">Excuses makes today easy , but they make tomorrow hard.<br>Discipline makes today hard but makes tomorrow easy</p>
+        <h1 class="main-title">Choose Your Course Now</h1>
+    </div>
+
+    <div class="search-container">
+        <input type="text" 
+               class="search-bar" 
+               placeholder="Search for courses by title or domain..." 
+               id="searchInput">
+        <div class="category-dropdown">
+            <button class="category-btn" id="categoryBtn">All Categories</button>
+            <div class="category-content" id="categoryContent">
+                <div class="category-item active" data-category="all">All Categories</div>
+                <div class="category-item" data-category="free">Free Courses</div>
+                <div class="category-item" data-category="paid">Paid Courses</div>
+                <div class="category-item" data-category="grade">Grade-Specific Courses</div>
+                <div class="domain-section">
+                    <div class="category-item" data-domain="all">All Domains</div>
+                    <div class="category-item" data-domain="physics">Physics</div>
+                    <div class="category-item" data-domain="chemistry">Chemistry</div>
+                    <div class="category-item" data-domain="biology">Biology</div>
+                    <div class="category-item" data-domain="mathematics">Mathematics</div>
+                    <div class="category-item" data-domain="computer-science">Computer Science</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="course-grid" id="courseGrid"></div>
+
+    <div class="pagination">
+        <button class="page-btn" data-page="prev">Previous</button>
+        <button class="page-btn active" data-page="1">1</button>
+        <button class="page-btn" data-page="2">2</button>
+        <button class="page-btn" data-page="next">Next</button>
+    </div>
+
+    <div class="modal" id="courseModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+       const domains = ['physics', 'chemistry', 'biology', 'mathematics', 'computer-science'];
+const courseNames = {
+    physics: ['Mechanics', 'Thermodynamics', 'Quantum Physics', 'Electromagnetism'],
+    chemistry: ['Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry', 'Biochemistry'],
+    biology: ['Cell Biology', 'Genetics', 'Ecology', 'Human Anatomy'],
+    mathematics: ['Calculus', 'Algebra', 'Statistics', 'Geometry'],
+    'computer-science': ['Programming', 'Data Structures', 'Algorithms', 'Web Development']
+};
+
+
+const courses = Array.from({ length: 20 }, (_, i) => {
+    const domain = domains[Math.floor(Math.random() * domains.length)];
+    const courseNameList = courseNames[domain];
+    const courseName = courseNameList[Math.floor(Math.random() * courseNameList.length)];
+    
+    return {
+        id: i + 1,
+        title: `${courseName} ${i + 1}`,
+        domain: domain,
+        duration: `${Math.floor(Math.random() * 10 + 1)} weeks`,
+        category: ['Free', 'Paid', 'Grade-specific'][Math.floor(Math.random() * 3)],
+        grade: Math.floor(Math.random() * 5 + 1),
+        description: `Learn ${courseName} with our comprehensive curriculum...`,
+        outcomes: [
+            `Understanding of ${courseName} fundamentals`,
+            'Practical application skills',
+            'Problem-solving abilities'
+        ],
+        fee: Math.floor(Math.random() * 100) * 10
+    };
+});
+
+let currentPage = 1;
+let currentFilter = 'all';
+let currentGrade = null;
+let currentDomain = 'all';
+let searchTerm = '';
+
+// Search Functionality
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchTerm = e.target.value.toLowerCase();
+    currentPage = 1;
+    updatePagination();
+    displayCourses();
+});
+
+// Domain Filter
+document.querySelectorAll('.domain-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.domain-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentDomain = btn.dataset.domain;
+        currentPage = 1;
+        updatePagination();
+        displayCourses();
+    });
+});
+
+// Filter by Category and Grade
+document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        if (currentFilter === 'grade') {
+            document.getElementById('gradeDropdown').classList.add('show');
+        } else {
+            document.getElementById('gradeDropdown').classList.remove('show');
+            currentGrade = null;
+        }
+        displayCourses();
+    });
+});
+
+// Grade Selection
+document.querySelectorAll('.filter-btn[data-grade]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentGrade = parseInt(btn.dataset.grade);
+        document.getElementById('gradeDropdown').classList.remove('show');
+        displayCourses();
+    });
+});
+
+// Pagination Functionality
+document.querySelectorAll('.page-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (btn.dataset.page === 'prev' && currentPage > 1) {
+            currentPage--;
+        } else if (btn.dataset.page === 'next' && currentPage < 2) {
+            currentPage++;
+        } else if (!isNaN(parseInt(btn.dataset.page))) {
+            currentPage = parseInt(btn.dataset.page);
+        }
+        updatePagination();
+        displayCourses();
+    });
+});
+
+function updatePagination() {
+    document.querySelectorAll('.page-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.page === currentPage.toString()) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+function filterCourses() {
+    let filtered = [...courses];
+    
+    if (searchTerm) {
+        filtered = filtered.filter(course => 
+            course.title.toLowerCase().includes(searchTerm) ||
+            course.domain.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    if (currentDomain !== 'all') {
+        filtered = filtered.filter(course => course.domain === currentDomain);
+    }
+    
+    if (currentFilter === 'free') {
+        filtered = filtered.filter(course => course.category === 'Free');
+    } else if (currentFilter === 'paid') {
+        filtered = filtered.filter(course => course.category === 'Paid');
+    } else if (currentFilter === 'grade' && currentGrade) {
+        filtered = filtered.filter(course => 
+            course.category === 'Grade-specific' && 
+            course.grade === currentGrade
+        );
+    }
+    return filtered;
+}
+
+function displayCourses() {
+    const filtered = filterCourses();
+    const start = (currentPage - 1) * 10;
+    const end = start + 10;
+    const pageContent = filtered.slice(start, end);
+
+    const grid = document.getElementById('courseGrid');
+    grid.innerHTML = '';
+
+    pageContent.forEach(course => {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.innerHTML = `
+            <h3>${course.title}</h3>
+            <p>Domain: ${course.domain.replace('-', ' ').toUpperCase()}</p>
+            <p>Duration: ${course.duration}</p>
+            <p>Category: ${course.category}</p>
+            ${course.category === 'Grade-specific' ? `<p>Grade: ${course.grade}</p>` : ''}
+            <button class="join-btn" data-id="${course.id}">Join Course</button>
+        `;
+        grid.appendChild(card);
+    });
+
+    document.querySelectorAll('.join-btn').forEach(btn => {
+        btn.addEventListener('click', () => showModal(btn.dataset.id));
+    });
+}
+
+function showModal(courseId) {
+    const course = courses.find(c => c.id === parseInt(courseId));
+    const modal = document.getElementById('courseModal');
+    const content = document.getElementById('modalContent');
+
+    content.innerHTML = `
+        <h2>${course.title}</h2>
+        <p>Domain: ${course.domain.replace('-', ' ').toUpperCase()}</p>
+        <p>Duration: ${course.duration}</p>
+        <p>Category: ${course.category}</p>
+        <p>${course.description}</p>
+    `;
+
+    modal.style.display = 'block';
+}
+
+document.querySelector('.close-btn').addEventListener('click', () => {
+    document.getElementById('courseModal').style.display = 'none';
+});
+
+displayCourses();
+
+        // Add these event listeners after your existing script
+
+// Category Dropdown Toggle
+const categoryBtn = document.getElementById('categoryBtn');
+const categoryContent = document.getElementById('categoryContent');
+
+// Toggle dropdown when clicking the button
+categoryBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent event from bubbling to document
+    categoryContent.classList.toggle('show');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (!categoryBtn.contains(e.target) && !categoryContent.contains(e.target)) {
+        categoryContent.classList.remove('show');
+    }
+});
+
+// Handle category selection
+document.querySelectorAll('.category-item').forEach(item => {
+    item.addEventListener('click', () => {
+        // Update button text
+        categoryBtn.textContent = item.textContent;
+        
+        // Remove active class from all items
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+        
+        // Add active class to selected item
+        item.classList.add('active');
+        
+        // Update filters based on selection
+        if (item.dataset.category) {
+            currentFilter = item.dataset.category;
+        } else if (item.dataset.domain) {
+            currentDomain = item.dataset.domain;
+        }
+        
+        // Close dropdown
+        categoryContent.classList.remove('show');
+        
+        // Reset to first page and update display
+        currentPage = 1;
+        updatePagination();
+        displayCourses();
+    });
+});
+
+    </script>
+</body>
+</html>

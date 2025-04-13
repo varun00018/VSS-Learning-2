@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSS Learning Community</title>
+    <style>
+:root {
+    --primary-color: #880E4F;
+    --secondary-color: #43002a;
+    --accent-color: #F39C12;
+    --accent-soft: #C2185B;
+    --accent-orange: #D35400;
+    --light-text: white;
+    --secondary-text: #B0B0B0;
+    --border-radius: 12px;
+    --card-background: rgba(136, 14, 79, 0.9);
+    --transition-speed: 0.3s;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    background-color: #800040;
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform var(--transition-speed);
+    min-width: 200px;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo img {
+    width: 30px;
+    margin-right: 10px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-grow: 1;
+    margin: 0 40px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--light-text);
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease-in-out;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    background-color: rgba(243, 156, 18, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-links a.active {
+    color: var(--accent-color);
+    background-color: rgba(243, 156, 18, 0.2);
+}
+
+.profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+    min-width: 35px;
+}
+
+.profile:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+    .left-column {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+.discussions {
+    background-color: rgba(121, 32, 83, 0.548);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.discussion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.tag-search {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent-soft);
+    border-radius: 4px;
+    background-color: rgba(59, 13, 57, 0.2);
+    color: var(--light-text);
+}
+
+.discussion-topic {
+    background-color: rgba(139, 10, 80, 0.2);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.discussion-topic:hover {
+    transform: translateX(5px);
+    background-color: rgba(194, 24, 91, 0.2);
+}
+
+.friends-section {
+    background-color: rgba(121, 32, 83, 0.548);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    background-color: rgba(139, 10, 80, 0.2);
+}
+
+.friend-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--accent-soft);
+}
+
+.online-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    margin-left: auto;
+}
+
+.events-section {
+    margin-top: 2rem;
+    background-color: rgba(121, 32, 83, 0.548);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: rgba(139, 10, 80, 0.2);
+    border-radius: 4px;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--accent-soft);
+    color: var(--light-text);
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--accent-orange);
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(59, 13, 57, 0.9);
+    overflow-y: auto;
+}
+
+.popup-content {
+    background-color: var(--primary-color);
+    margin: 5% auto;
+    padding: 25px;
+    border: 1px solid var(--accent-soft);
+    border-radius: var(--border-radius);
+    width: 80%;
+    max-width: 800px;
+    color: var(--light-text);
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    color: var(--secondary-text);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color var(--transition-speed);
+}
+
+.close:hover {
+    color: var(--accent-color);
+}
+
+.response-item {
+    background-color: rgba(59, 13, 57, 0.3);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    position: relative;
+}
+
+.vote-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.vote-btn {
+    background: none;
+    border: 1px solid var(--accent-soft);
+    color: var(--light-text);
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+.vote-btn:hover {
+    background-color: var(--accent-soft);
+}
+
+.vote-count {
+    margin-left: 10px;
+    color: var(--secondary-text);
+}
+
+.response-input {
+    margin-top: 20px;
+    width: 100%;
+    background-color: rgba(59, 13, 57, 0.2);
+    border: 1px solid var(--accent-soft);
+    color: var(--light-text);
+    padding: 10px;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.tags-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.tag {
+    background-color: var(--accent-soft);
+    color: var(--light-text);
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tag-remove {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.friend-request {
+    background-color: rgba(59, 13, 57, 0.3);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-details {
+    margin-top: 15px;
+    line-height: 1.6;
+}
+
+.register-btn {
+    background-color: var(--accent-color);
+    color: var(--light-text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color var(--transition-speed);
+}
+
+.register-btn:hover {
+    background-color: var(--accent-orange);
+}
+.mentors-section {
+        background-color: rgba(121, 32, 83, 0.548);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-top: 0; /* Remove the top margin since we're using gap */
+    }
+
+.mentor-card {
+    background-color: rgba(139, 10, 80, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: transform 0.3s;
+}
+
+.mentor-card:hover {
+    transform: translateX(5px);
+    background-color: rgba(194, 24, 91, 0.2);
+}
+
+.mentor-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mentor-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--accent-soft);
+}
+
+.mentor-info {
+    flex-grow: 1;
+}
+
+.mentor-status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    background-color: var(--accent-color);
+    color: var(--light-text);
+}
+
+.mentor-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.mentor-chat {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: rgba(59, 13, 57, 0.3);
+    border-radius: 8px;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.user-message {
+    background-color: rgba(194, 24, 91, 0.2);
+    margin-left: 20px;
+}
+
+.mentor-message {
+    background-color: rgba(139, 10, 80, 0.2);
+    margin-right: 20px;
+}
+
+.message-input {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.message-input textarea {
+    flex-grow: 1;
+    background-color: rgba(59, 13, 57, 0.2);
+    border: 1px solid var(--accent-soft);
+    color: var(--light-text);
+    padding: 8px;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 40px;
+}
+
+.no-mentor {
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(139, 10, 80, 0.2);
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+/* Add styles for mentor popup */
+.mentor-popup-content {
+    max-width: 600px;
+}
+
+.mentor-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.mentor-option {
+    background-color: rgba(139, 10, 80, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.mentor-option:hover {
+    transform: scale(1.02);
+    background-color: rgba(194, 24, 91, 0.2);
+}
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-wrap: wrap;
+        padding: 10px 15px;
+    }
+    
+    .logo {
+        margin-right: 20px;
+    }
+    
+    .nav-links {
+        order: 3;
+        width: 100%;
+        margin-top: 15px;
+        justify-content: space-between;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- [Previous HTML structure remains unchanged up to container div] -->
+
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="mycourse.html">My Courses</a>
+            <a href="Explorecourses.html">Explore Courses</a>
+            <a href="performance.html">Performance</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="exam corner.html">Exam Corner</a>
+            <a href="community.html" class="active">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile"></div></a>
+    </div>
+
+    <div class="container">
+        <div class="left-column">
+            <section class="discussions">
+                <div class="discussion-header">
+                    <h2>Active Discussions</h2>
+                    <input type="text" class="tag-search" placeholder="Search by tags...">
+                </div>
+                <div class="discussion-topic">
+                    <h3>Understanding Neural Networks</h3>
+                    <p class="tags">Tags: AI, Machine Learning, Deep Learning</p>
+                    <p>15 responses • Last updated 2h ago</p>
+                </div>
+                <div class="discussion-topic">
+                    <h3>Tips for Calculus Integration</h3>
+                    <p class="tags">Tags: Mathematics, Calculus</p>
+                    <p>23 responses • Last updated 5h ago</p>
+                </div>
+                <button class="btn">Add New Discussion</button>
+            </section>
+
+            <section class="mentors-section">
+                <h2>My Mentors</h2><br>
+                <div id="mentorsContainer">
+                    <!-- Mentors will be populated here -->
+                </div>
+            </section>
+        </div>
+
+        <aside class="right-column">
+            <section class="friends-section">
+                <h2>Friends</h2><br>
+                <div class="friend-item">
+                    <div class="friend-avatar"></div>
+                    <div class="friend-info">
+                        <h4>Varun Fernandez</h4>
+                        <p>Completed Python Course</p>
+                    </div>
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="friend-item">
+                    <div class="friend-avatar"></div>
+                    <div class="friend-info">
+                        <h4>Jane Smith</h4>
+                        <p>Congratulated you for winning HacknDroid</p>
+                    </div>
+                    <div class="online-indicator"></div>
+                </div>
+                <button class="btn">View All Friends</button>
+            </section>
+
+            <section class="events-section">
+                <h2>Upcoming Events</h2><br>
+                <div class="event-item">
+                    <div>
+                        <h4>AI Workshop</h4>
+                        <p>March 15, 2024</p>
+                    </div>
+                    <button class="btn">Details</button>
+                </div>
+                <div class="event-item">
+                    <div>
+                        <h4>Coding Competition</h4>
+                        <p>March 20, 2024</p>
+                    </div>
+                    <button class="btn">Details</button>
+                </div>
+            </section>
+
+        
+        </aside>
+    </div>
+   
+</div>
+
+    <!-- Discussion Popup -->
+    <div id="discussionPopup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2 id="discussionTitle"></h2>
+            <p id="discussionTags"></p>
+            <div id="responses"></div>
+            <textarea class="response-input" placeholder="Add your response..."></textarea>
+            <button class="btn" onclick="submitResponse()">Submit Response</button>
+        </div>
+    </div>
+
+    <!-- New Discussion Popup -->
+    <div id="newDiscussionPopup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2>Start a New Discussion</h2>
+            <textarea class="response-input" placeholder="What's your question?"></textarea>
+            <div class="tags-input">
+                <input type="text" placeholder="Add tags (press Enter)" id="tagInput">
+                <div id="tagsList"></div>
+            </div>
+            <button class="btn" onclick="submitNewDiscussion()">Post Discussion</button>
+        </div>
+    </div>
+
+    <!-- Friends Popup -->
+    <div id="friendsPopup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2>Friends List</h2>
+            <div id="friendsList"></div>
+            <h3>Friend Requests</h3>
+            <div id="friendRequests"></div>
+        </div>
+    </div>
+
+    <!-- Event Details Popup -->
+    <div id="eventPopup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2 id="eventTitle"></h2>
+            <div class="event-details" id="eventDetails"></div>
+            <button class="register-btn">Register for Event</button>
+        </div>
+    </div>
+
+    <div id="mentorPopup" class="popup">
+        <div class="popup-content mentor-popup-content">
+            <span class="close">&times;</span>
+            <h2>Available Mentors</h2>
+            <div class="mentor-list" id="availableMentors">
+                <!-- Available mentors will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+// Popup management
+const popups = {
+    discussion: document.getElementById('discussionPopup'),
+    newDiscussion: document.getElementById('newDiscussionPopup'),
+    friends: document.getElementById('friendsPopup'),
+    event: document.getElementById('eventPopup')
+};
+
+// Close all popups when clicking close button or outside
+document.querySelectorAll('.close').forEach(closeBtn => {
+    closeBtn.onclick = function() {
+        Object.values(popups).forEach(popup => {
+            popup.style.display = 'none';
+        });
+    }
+});
+
+window.onclick = function(event) {
+    Object.values(popups).forEach(popup => {
+        if (event.target == popup) {
+            popup.style.display = 'none';
+        }
+    });
+}
+
+// Discussion Topics
+document.querySelectorAll('.discussion-topic').forEach(topic => {
+    topic.onclick = function() {
+        const title = this.querySelector('h3').textContent;
+        const tags = this.querySelector('.tags').textContent;
+        
+        document.getElementById('discussionTitle').textContent = title;
+        document.getElementById('discussionTags').textContent = tags;
+        
+        // Sample responses (in real app, these would come from a database)
+        const sampleResponses = [
+            { user: 'User1', text: 'Great question! Here\'s my thought...', votes: 5 },
+            { user: 'User2', text: 'I would approach this differently...', votes: 3 }
+        ];
+        
+        const responsesHTML = sampleResponses.map(response => `
+            <div class="response-item">
+                <strong>${response.user}</strong>
+                <p>${response.text}</p>
+                <div class="vote-buttons">
+                    <button class="vote-btn" onclick="vote(this, 1)">↑</button>
+                    <button class="vote-btn" onclick="vote(this, -1)">↓</button>
+                    <span class="vote-count">${response.votes}</span>
+                </div>
+            </div>
+        `).join('');
+        
+        document.getElementById('responses').innerHTML = responsesHTML;
+        popups.discussion.style.display = 'block';
+    }
+});
+
+// New Discussion
+document.querySelector('.discussions .btn').onclick = function() {
+    popups.newDiscussion.style.display = 'block';
+}
+
+// Tags Management
+const tagInput = document.getElementById('tagInput');
+const tagsList = document.getElementById('tagsList');
+let tags = [];
+
+tagInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && this.value) {
+        tags.push(this.value);
+        updateTags();
+        this.value = '';
+    }
+});
+
+function updateTags() {
+    tagsList.innerHTML = tags.map(tag => `
+        <span class="tag">
+            ${tag}
+            <span class="tag-remove" onclick="removeTag('${tag}')">&times;</span>
+        </span>
+    `).join('');
+}
+
+function removeTag(tag) {
+    tags = tags.filter(t => t !== tag);
+    updateTags();
+}
+
+// Friends List
+document.querySelector('.friends-section .btn').onclick = function() {
+    const friendsHTML = `
+        <div class="friend-item">
+            <div class="friend-avatar"></div>
+            <div class="friend-info">
+                <h4>John Doe</h4>
+                <p>Online</p>
+            </div>
+        </div>
+    `;
+    
+    const requestsHTML = `
+        <div class="friend-request">
+            <div>
+                <h4>Sarah Johnson</h4>
+                <p>Wants to connect</p>
+            </div>
+            <div>
+                <button class="btn">Accept</button>
+                <button class="btn">Decline</button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('friendsList').innerHTML = friendsHTML;
+    document.getElementById('friendRequests').innerHTML = requestsHTML;
+    popups.friends.style.display = 'block';
+}
+
+// Event Details
+document.querySelectorAll('.event-item .btn').forEach(btn => {
+    btn.onclick = function() {
+        const eventTitle = this.parentElement.querySelector('h4').textContent;
+        const eventDate = this.parentElement.querySelector('p').textContent;
+        
+        document.getElementById('eventTitle').textContent = eventTitle;
+        document.getElementById('eventDetails').innerHTML = `
+            <p><strong>Date:</strong> ${eventDate}</p>
+            <p><strong>Location:</strong> Virtual</p>
+            <p><strong>Duration:</strong> 2 hours</p>
+            <p><strong>Description:</strong> Join us for an exciting event where industry experts will share their knowledge and experience. Don't miss this opportunity to learn and network with peers.</p>
+        `;
+        
+        popups.event.style.display = 'block';
+    }
+});
+
+// Voting System
+function vote(btn, value) {
+    const voteCount = btn.parentElement.querySelector('.vote-count');
+    let currentVotes = parseInt(voteCount.textContent);
+    voteCount.textContent = currentVotes + value;
+}
+
+// Remove "Ask a Question" button
+const askQuestionBtn = document.getElementById('openPopup');
+if (askQuestionBtn) {
+    askQuestionBtn.remove();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Sample mentor data (in a real app, this would come from a database)
+    const mentors = [
+        {
+            id: 1,
+            name: "Dr. Sarah Williams",
+            expertise: "Machine Learning",
+            status: "Active",
+            hasChat: true
+        }
+    ];
+
+    const availableMentors = [
+        {
+            id: 2,
+            name: "Prof. James Chen",
+            expertise: "Data Structures",
+            rating: 4.8
+        },
+        {
+            id: 3,
+            name: "Dr. Emily Brown",
+            expertise: "Web Development",
+            rating: 4.9
+        }
+    ];
+
+    function renderMentors() {
+        const container = document.getElementById('mentorsContainer');
+        
+        if (mentors.length === 0) {
+            container.innerHTML = `
+                <div class="no-mentor">
+                    <p>You currently have no mentors.</p>
+                    <button class="btn" onclick="showMentorSelection()">Add Mentor</button>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = mentors.map(mentor => `
+            <div class="mentor-card">
+                <div class="mentor-header">
+                    <div class="mentor-avatar"></div>
+                    <div class="mentor-info">
+                        <h3>${mentor.name}</h3>
+                        <p>${mentor.expertise}</p>
+                    </div>
+                    <span class="mentor-status">${mentor.status}</span>
+                </div>
+                ${mentor.hasChat ? renderChat(mentor) : ''}
+                <div class="mentor-actions">
+                    <button class="btn" onclick="toggleChat(${mentor.id})">Message</button>
+                    <button class="btn" onclick="scheduleMeeting(${mentor.id})">Schedule Meeting</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderChat(mentor) {
+        return `
+            <div class="mentor-chat">
+                <div class="chat-message mentor-message">
+                    <strong>${mentor.name}:</strong>
+                    <p>How can I help you today?</p>
+                </div>
+                <div class="chat-message user-message">
+                    <strong>You:</strong>
+                    <p>I have a question about neural networks.</p>
+                </div>
+                <div class="message-input">
+                    <textarea placeholder="Type your message..."></textarea>
+                    <button class="btn" onclick="sendMessage(${mentor.id})">Send</button>
+                </div>
+            </div>
+        `;
+    }
+
+    function showMentorSelection() {
+        const popup = document.getElementById('mentorPopup');
+        const mentorList = document.getElementById('availableMentors');
+        
+        mentorList.innerHTML = availableMentors.map(mentor => `
+            <div class="mentor-option" onclick="selectMentor(${mentor.id})">
+                <div class="mentor-avatar"></div>
+                <h3>${mentor.name}</h3>
+                <p>${mentor.expertise}</p>
+                <p>Rating: ${mentor.rating}</p>
+            </div>
+        `).join('');
+        
+        popup.style.display = 'block';
+    }
+
+    // Initialize mentors section
+    renderMentors();
+
+    // Add to existing window.onclick handler
+    const mentorPopup = document.getElementById('mentorPopup');
+    window.onclick = function(event) {
+        if (event.target == mentorPopup) {
+            mentorPopup.style.display = 'none';
+        }
+        // Previous popup handling remains the same
+    }
+});
+
+function toggleChat(mentorId) {
+    // Toggle chat visibility
+    const chat = document.querySelector(`.mentor-card[data-mentor="${mentorId}"] .mentor-chat`);
+    if (chat) {
+        chat.style.display = chat.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function sendMessage(mentorId) {
+    // Handle sending message (in real app, this would connect to a backend)
+    const messageInput = document.querySelector(`.mentor-card[data-mentor="${mentorId}"] textarea`);
+    if (messageInput && messageInput.value.trim()) {
+        const chatContainer = document.querySelector(`.mentor-card[data-mentor="${mentorId}"] .mentor-chat`);
+        const newMessage = document.createElement('div');
+        newMessage.className = 'chat-message user-message';
+        newMessage.innerHTML = `
+            <strong>You:</strong>
+            <p>${messageInput.value}</p>
+        `;
+        chatContainer.insertBefore(newMessage, document.querySelector('.message-input'));
+        messageInput.value = '';
+    }
+}
+
+function selectMentor(mentorId) {
+    // Handle mentor selection (in real app, this would connect to a backend)
+    const mentor = availableMentors.find(m => m.id === mentorId);
+    if (mentor) {
+        mentors.push({
+            ...mentor,
+            status: 'Pending',
+            hasChat: false
+        });
+        renderMentors();
+        document.getElementById('mentorPopup').style.display = 'none';
+    }
+}
+
+function scheduleMeeting(mentorId) {
+    // Handle meeting scheduling (in real app, this would open a calendar/scheduling interface)
+    alert('Meeting scheduling functionality would be implemented here');
+}
+    </script>
+</body>
+</html>

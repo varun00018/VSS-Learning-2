@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSS Learning - Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #800040;
+            --secondary: #38001A;
+            --accent: #FFA500;
+            --button-active: #FF8C00;
+            --text-light: #FFFFFF;
+            --background: #38001A;
+            --primary-color: #880E4F;
+    --secondary-color: #43002a;
+    --accent-color: #F39C12;
+    --accent-soft: #C2185B;
+    --accent-orange: #D35400;
+    --light-text: white;
+    --secondary-text: #B0B0B0;
+    --border-radius: 12px;
+    --card-background: rgba(136, 14, 79, 0.9);
+    --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Navigation Styles */
+        .nav-bar {
+            background-color: var(--primary);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-light);
+        }
+        .logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform var(--transition-speed);
+    min-width: 200px;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo img {
+    width: 30px;
+    margin-right: 10px;
+}
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-grow: 1;
+            margin: 0 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-speed) ease-in-out;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+    background-color: rgba(243, 156, 18, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-links a.active {
+    color: var(--accent-color);
+    background-color: rgba(243, 156, 18, 0.2);
+}
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid white;
+        }
+
+        body {
+            background-color: var(--background);
+            min-height: 100vh;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .profile-container {
+            background: var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+            color: var(--text-light);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .profile-header h1 {
+            font-size: 32px;
+        }
+
+        .large-profile-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .phone-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .country-select {
+            width: 100px;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .verify-btn {
+            padding: 12px 24px;
+            background-color: var(--accent);
+            color: var(--text-light);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .verify-btn:hover {
+            background-color: var(--button-active);
+        }
+
+        .verify-btn.verified {
+            background-color: #34C759;
+        }
+
+        .upload-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent);
+            color: var(--text-light);
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--button-active);
+        }
+
+        .error-message {
+            color: #FF6B6B;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="mycourse.html">My Courses</a>
+            <a href="Explorecourses.html">Explore Courses</a>
+            <a href="performance.html">Performance</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="exam corner.html">Exam Corner</a>
+            <a href="community.html">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile-icon"></div></a>
+    </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="large-profile-icon" id="largeProfileIcon">
+                    <img src="/api/placeholder/100/100" alt="Profile" id="largeProfileImage">
+                </div>
+                <h1>Your Profile</h1>
+            </div>
+            
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter your name" value="John Doe">
+                    <div class="error-message" id="nameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <div class="phone-group">
+                        <select class="country-select" id="countryCode">
+                            <option value="+1">+1</option>
+                            <option value="+91" selected>+91</option>
+                            <option value="+44">+44</option>
+                            <option value="+81">+81</option>
+                            <option value="+86">+86</option>
+                        </select>
+                        <div class="input-group">
+                            <input type="tel" id="phone" class="form-control" placeholder="Enter 10-digit number" maxlength="10">
+                            <button type="button" class="verify-btn" data-field="phone">Verify</button>
+                        </div>
+                    </div>
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-group">
+                        <input type="email" id="email" class="form-control" placeholder="Enter email" value="john.doe@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                        <button type="button" class="verify-btn" data-field="email">Verify</button>
+                    </div>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="aadhar">Aadhar Card Number</label>
+                    <div class="input-group">
+                        <input type="text" id="aadhar" class="form-control" placeholder="Enter 12-digit Aadhar number" maxlength="12">
+                        <button type="button" class="verify-btn" data-field="aadhar">Verify</button>
+                    </div>
+                    <div class="error-message" id="aadharError"></div>
+                </div>
+
+                <div class="upload-section">
+                    <label>Upload Aadhar Card</label>
+                    <div class="upload-btn" id="uploadBtn">
+                        Click to upload file or drag and drop
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize with prefilled data
+document.addEventListener('DOMContentLoaded', () => {
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    // Set prefilled values
+    name.value = "John Doe";
+    email.value = "john.doe@example.com";
+});
+
+// Validation functions
+function validatePhone(phone) {
+    return /^\d{10}$/.test(phone);
+}
+
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validateAadhar(aadhar) {
+    return /^\d{12}$/.test(aadhar);
+}
+
+function showError(elementId, message) {
+    const errorElement = document.getElementById(elementId + 'Error');
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+}
+
+function hideError(elementId) {
+    const errorElement = document.getElementById(elementId + 'Error');
+    errorElement.style.display = 'none';
+}
+
+// Handle verification buttons with validation
+document.querySelectorAll('.verify-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const field = this.dataset.field;
+        const input = document.getElementById(field);
+        let isValid = false;
+
+        switch(field) {
+            case 'phone':
+                isValid = validatePhone(input.value);
+                if (!isValid) {
+                    showError(field, 'Please enter a valid 10-digit number');
+                }
+                break;
+            case 'email':
+                isValid = validateEmail(input.value);
+                if (!isValid) {
+                    showError(field, 'Please enter a valid email address');
+                }
+                break;
+            case 'aadhar':
+                isValid = validateAadhar(input.value);
+                if (!isValid) {
+                    showError(field, 'Please enter a valid 12-digit Aadhar number');
+                }
+                break;
+        }
+
+        if (isValid) {
+            hideError(field);
+            this.classList.add('verified');
+            this.textContent = 'Verified';
+        }
+    });
+});
+
+// Input validation on change
+document.getElementById('phone').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '');
+    if (this.value.length === 10) {
+        hideError('phone');
+    }
+});
+
+document.getElementById('aadhar').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '');
+    if (this.value.length === 12) {
+        hideError('aadhar');
+    }
+});
+
+document.getElementById('email').addEventListener('input', function() {
+    if (validateEmail(this.value)) {
+        hideError('email');
+    }
+});
+
+// Profile image handling
+function setupProfileImageUpload(iconElement, imageElement) {
+            iconElement.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const newImageSrc = e.target.result;
+                            document.getElementById('smallProfileImage').src = newImageSrc;
+                            document.getElementById('largeProfileImage').src = newImageSrc;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                input.click();
+            });
+        }
+
+setupProfileImageUpload(document.getElementById('largeProfileIcon'), document.getElementById('largeProfileImage'));
+setupProfileImageUpload(document.getElementById('smallProfileIcon'), document.getElementById('smallProfileImage'));
+
+// File upload handling
+const uploadBtn = document.getElementById('uploadBtn');
+
+// Prevent default drag behaviors
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    uploadBtn.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+});
+
+// Handle drag and drop visual feedback
+uploadBtn.addEventListener('dragenter', () => {
+    uploadBtn.style.borderColor = '#FFA500';
+    uploadBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+});
+
+uploadBtn.addEventListener('dragleave', () => {
+    uploadBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+    uploadBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+});
+
+uploadBtn.addEventListener('drop', (e) => {
+    const files = e.dataTransfer.files;
+    handleFiles(files);
+});
+
+uploadBtn.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*,.pdf';
+    input.onchange = (e) => handleFiles(e.target.files);
+    input.click();
+});
+
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        if (file.type === 'application/pdf' || file.type.startsWith('image/')) {
+            uploadBtn.textContent = `Selected file: ${file.name}`;
+            uploadBtn.style.borderColor = '#34C759';
+            // Here you could add the file to FormData for upload
+        } else {
+            uploadBtn.textContent = 'Please upload a PDF or image file';
+            uploadBtn.style.borderColor = '#FF6B6B';
+        }
+    }
+}
+
+// Form submission handling
+document.getElementById('profileForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    let isValid = true;
+    const formData = new FormData();
+
+    // Validate all fields
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const aadhar = document.getElementById('aadhar').value;
+
+    if (!validatePhone(phone)) {
+        showError('phone', 'Please enter a valid 10-digit number');
+        isValid = false;
+    }
+
+    if (!validateEmail(email)) {
+        showError('email', 'Please enter a valid email address');
+        isValid = false;
+    }
+
+    if (!validateAadhar(aadhar)) {
+        showError('aadhar', 'Please enter a valid 12-digit Aadhar number');
+        isValid = false;
+    }
+
+    if (isValid) {
+        // Collect form data
+        formData.append('name', document.getElementById('name').value);
+        formData.append('countryCode', document.getElementById('countryCode').value);
+        formData.append('phone', phone);
+        formData.append('email', email);
+        formData.append('aadhar', aadhar);
+
+        // Here you would typically send the formData to your server
+        // For demonstration purposes, show success message
+        alert('Profile updated successfully!');
+        
+        // You could add AJAX request here:
+        /*
+        fetch('/api/update-profile', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Profile updated successfully!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating profile');
+        });
+        */
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSS Learning Platform</title>
+    <style>
+        :root {
+            --primary-color: #880E4F;
+            --secondary-color: #43002a;
+            --accent-color: #F39C12;
+            --light-text: white;
+            --border-radius: 12px;
+            --card-background: rgba(136, 14, 79, 0.9);
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        /* Navigation Bar */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform var(--transition-speed);
+    min-width: 200px;
+} 
+.logo:hover {
+    transform: scale(1.05);
+}
+        
+.logo img {
+    width: 30px;
+    margin-right: 10px;
+}
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-grow: 1;
+    margin: 0 40px;
+}
+.nav-links a {
+    text-decoration: none;
+    color: var(--light-text);
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease-in-out;
+    white-space: nowrap;
+}
+.nav-links a:hover {
+    background-color: rgba(243, 156, 18, 0.1);
+    transform: translateY(-2px);
+}
+.nav-links a.active {
+    color: var(--accent-color);
+    background-color: rgba(243, 156, 18, 0.2);
+}
+.profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+    min-width: 35px;
+}
+.profile:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+        /* Quote Section */
+        .quote-container {
+            text-align: center;
+            font-style: italic;
+            padding: 30px 20px;
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            font-size: 1.8rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            font-family:cursive;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Card Styles */
+        .card {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--light-text);
+            text-align: center;
+        }
+        
+        /* Problem of the Day */
+        .problem-card {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .problem-container {
+            background-color: rgba(0,0,0,0.3);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .problem-title {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .problem-description {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .button {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background-color: #f3c212;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* Community Updates */
+        .community-card {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .update-item {
+            background-color: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            transition: background-color var(--transition-speed);
+        }
+        
+        .update-item:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .update-icon {
+            margin-right: 10px;
+        }
+        
+        .community-button {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+            background-color: #F39C12;
+            border: 1px solid #F39C12ff;
+        }
+        
+        .community-button:hover {
+            background-color: #f3c212;
+        }
+        
+        /* Messages */
+        .messages-card {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .message-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background-color var(--transition-speed);
+            cursor: pointer;
+        }
+        
+        .message-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .message-number {
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .message-text {
+            flex: 1;
+            background-color: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 6px;
+            transition: transform var(--transition-speed);
+        }
+        
+        .message-item:hover .message-text {
+            transform: translateX(5px);
+        }
+        
+        /* Continue Learning Section */
+        .continue-learning {
+            flex: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .continue-title {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .course-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .course-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #6d0d3a;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-speed);
+        }
+        
+        .course-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .course-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .course-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .course-progress {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .continue-button {
+            background-color: #F39C12;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .continue-button:hover {
+            background-color: #f3c212;
+        }
+        
+        .view-courses {
+            margin-top: 25px;
+            background-color: var(--accent-color);
+            padding: 12px 25px;
+            font-size: 1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-bar {
+                flex-wrap: wrap;
+                padding: 10px 15px;
+            }
+            
+            .logo {
+                margin-right: 20px;
+            }
+            
+            .nav-links {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+                justify-content: space-between;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .course-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .continue-button {
+                align-self: flex-end;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quote-container {
+                font-size: 1rem;
+                padding: 20px 15px;
+            }
+            
+            .nav-links a {
+                font-size: 14px;
+                padding: 5px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="mycourse.html">My Courses</a>
+            <a href="Explorecourses.html">Explore Courses</a>
+            <a href="performance.html">Performance</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="exam corner.html">Exam Corner</a>
+            <a href="community.html">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile"></div></a>
+    </div>
+    
+    <!-- Quote Section -->
+    <div class="quote-container">
+        <p>"Education is not the learning of facts, but the training of the mind to think." — Albert Einstein</p>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Problem of the Day -->
+        <div class="card problem-card">
+            <h2 class="card-title">Problem Of The Day</h2>
+            <div class="problem-container">
+                <p class="problem-title">Problem 123</p>
+                <p class="problem-title">Data Structures and Algorithms</p>
+                <p class="problem-description">
+                    Problem related to every data structure you have studied so far.
+                </p>
+            </div>
+            <div class="button-container">
+                <a href="problemoftheday.html"><button class="button">Solve</button></a>
+                <button class="button">Previous Solutions</button>
+            </div>
+        </div>
+        
+        <!-- Community Updates -->
+        <div class="card community-card">
+            <h2 class="card-title">Community Updates</h2>
+            <div class="update-item">
+                <span class="update-icon">🎓</span>
+                <span>Alex completed 'Machine Learning - Lecture 10'!</span>
+            </div>
+            <div class="update-item">
+                <span class="update-icon">🏆</span>
+                <span>Lisa scored 95% on 'Data Science Quiz'!</span>
+            </div>
+            <div class="update-item">
+                <span class="update-icon">🚀</span>
+                <span>John started 'Python for beginners' course!</span>
+            </div>
+            <a href="community.html"><button class="button community-button">Go to Community</button></a>
+        </div>
+        
+        <!-- Messages -->
+        <div class="card messages-card">
+            <h2 class="card-title">Messages For You</h2>
+            <div class="message-item">
+                <div class="message-number">1</div>
+                <div class="message-text">New Study material uploaded</div>
+            </div>
+            <div class="message-item">
+                <div class="message-number">2</div>
+                <div class="message-text">Assignment Deadline extended</div>
+            </div>
+            <div class="message-item">
+                <div class="message-number">3</div>
+                <div class="message-text">Upcoming webinar on AI and ML</div>
+            </div>
+        </div>
+        
+        <!-- Continue Learning -->
+        <div class="card continue-learning">
+            <h2 class="continue-title">Continue Your Learning</h2>
+            <div class="course-container">
+                <div class="course-item">
+                    <div class="course-info">
+                        <div class="course-name">Machine Learning Basics</div>
+                        <div class="course-progress">Lecture 34 completed · Continue with Lecture 35</div>
+                    </div>
+                    <a href="mycourse.html">
+                        <button class="button continue-button">
+                            <span>▶</span> Continue
+                        </button>
+                    </a>
+                </div>
+                
+                <div class="course-item">
+                    <div class="course-info">
+                        <div class="course-name">Data Structures and Algorithms</div>
+                        <div class="course-progress">Lecture 12 completed · Continue with Lecture 13</div>
+                    </div>
+                    <a href="mycourse.html">
+                        <button class="button continue-button">
+                            <span>▶</span> Continue
+                        </button>
+                    </a>
+                </div>
+                
+                <div class="course-item">
+                    <div class="course-info">
+                        <div class="course-name">Cybersecurity Fundamentals</div>
+                        <div class="course-progress">Lecture 20 completed · Continue with Lecture 21</div>
+                    </div>
+                    <a href="mycourse.html">
+                        <button class="button continue-button">
+                            <span>▶</span> Continue
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <a href="mycourse.html"><button class="button view-courses">View my courses</button></a>
+        </div>
+    </div>
+</body>
+</html>

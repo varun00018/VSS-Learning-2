@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform</title>
+    <style>
+:root {
+    --primary-color: #880E4F;
+    --secondary-color: #43002a;
+    --accent-color: #F39C12;
+    --light-text: white;
+    --border-radius: 12px;
+    --card-background: rgba(136, 14, 79, 0.9);
+    --transition-speed: 0.3s;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--primary-color);
+    padding: 15px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform var(--transition-speed);
+    min-width: 200px;
+}
+.logo:hover {
+    transform: scale(1.05);
+}
+        
+.logo img {
+    width: 30px;
+    margin-right: 10px;
+}
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-grow: 1;
+    margin: 0 40px;
+}
+.nav-links a {
+    text-decoration: none;
+    color: var(--light-text);
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease-in-out;
+    white-space: nowrap;
+}
+.nav-links a:hover {
+    background-color: rgba(243, 156, 18, 0.1);
+    transform: translateY(-2px);
+}
+.nav-links a.active1 {
+    color: var(--accent-color);
+    background-color: rgba(243, 156, 18, 0.2);
+}
+.profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+    min-width: 35px;
+}
+.profile:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+body {
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+    display: flex;
+    min-height: 100vh;
+    padding-top: 70px; /* Changed from margin-top to padding-top */
+}
+        /* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    background-color: var(--primary-color);
+    padding: 20px 0;
+    border-right: 1px solid rgba(194, 24, 91, 0.3);
+    position: fixed;
+    top: 70px;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+}
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--accent-color,0.3);
+        }
+
+        .nav-items {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item.active {
+            background-color: rgba(194, 24, 91, 0.2);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .nav-item:hover {
+            background-color: rgba(243,156,18,0.1);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Main Content Area */
+.main-content {
+    flex: 1;
+    margin-left: 250px; /* Match sidebar width */
+    padding: 20px;
+    overflow-y: auto;
+    min-height: calc(100vh - 70px);
+}
+.section {
+    display: none;
+    padding: 20px;
+}
+.section.active {
+    display: block;
+}
+        /* Course Cards */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+        .course-card {
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent-color, 0.3);
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+            color: #C2185B;
+        }
+
+        .course-title {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(194, 24, 91, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #C2185B;
+            transition: width 0.3s;
+        }
+
+        /* Video Player */
+.video-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+
+        .video-controls {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-button {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .video-time {
+            margin-left: auto;
+            font-size: 14px;
+        }
+
+        /* Tabs */
+        .content-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    position: sticky;
+    top: 90px;
+    background: var(--primary-color);
+    padding: 10px 0;
+    z-index: 90;
+}
+        .tab {
+            padding: 10px 20px;
+            background: rgba(243, 156, 18, 0.1);
+            border: 1px solid var(--accent-color, 0.3);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .tab.active {
+            background: rgba(243, 156, 18, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .calculator-toggle {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--accent-color);
+    border-radius: var(--border-radius);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.calculator {
+  position: fixed;
+  left: 20px;
+  bottom: 80px;
+  width: 280px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  overflow: hidden;
+  display: none;
+}
+
+.calculator.active {
+  display: block;
+}
+
+.calculator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.calculator-close {
+  background: none;
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.calculator-display {
+  height: 64px;
+  padding: 0 16px;
+  background-color: #f8f8f8;
+  color: black;
+  border-bottom: 1px solid #ddd;
+  font-size: 32px;
+  font-weight: 500;
+  text-align: right;
+  line-height: 64px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.calculator-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background-color: #ddd;
+}
+
+.calc-button {
+  height: 60px;
+  border: none;
+  background-color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+.calc-button:hover {
+  background-color: #f0f0f0;
+}
+
+.calc-button:active {
+  background-color: #e0e0e0;
+}
+
+.function-button {
+  background-color: #f1f1f1;
+}
+
+.operation {
+    background-color: var(--accent-color);
+}
+
+.operation:active {
+  background-color: #f8c291;
+}
+
+.zero {
+  grid-column: span 2;
+}
+        /* Assignment Styles */
+        .assignment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .assignment-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #E0E0E0;
+        }
+
+        .assignment-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .assignment-question {
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            min-height: 150px;
+            background: #240D25;
+            border: 1px solid rgba(194, 24, 91, 0.3);
+            color: #E0E0E0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .submit-button {
+            background: var(--accent-color);
+            border-radius: var(--border-radius);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        /* Test Styles */
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .test-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #E0E0E0;
+        }
+
+        .test-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .test-question {
+            margin-bottom: 25px;
+        }
+
+        .options-list {
+            list-style: none;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .option-radio {
+            margin-right: 10px;
+            accent-color: #C2185B;
+        }
+.timer-display {
+    position: fixed;
+    top: 90px; /* Adjusted to be below nav bar */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 95;
+}/* Lesson List */
+        .lesson-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .lesson-item {
+            background: var(--secondary-color);
+            margin-bottom: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--accent-color, 0.3);
+            border-radius: var(--border-radius);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .lesson-item:hover {
+            background: rgba(243, 156, 18, 0.1);
+        }
+
+        .lesson-item.completed {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .completion-badge {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .lesson-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lesson-content {
+            padding: 15px;
+            display: none;
+        }
+
+        .lesson-content.active {
+            display: block;
+        }
+
+        .back-button {
+            padding: 8px 16px;
+            background: #C2185B;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .video-description {
+            margin-top: 20px;
+            background: #3B0D39;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .assignment-questions, .test-questions {
+            margin-top: 20px;
+        }
+
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            background: #240D25;
+            border: 1px solid rgba(194, 24, 91, 0.3);
+            color: #E0E0E0;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+        }
+
+        .option {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .nav-text {
+                display: none;
+            }
+            
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="https://img.icons8.com/?size=100&id=79387&format=png&color=F39C12" alt="logo">
+            VSS Learning
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="mycourse.html" class="active1">My Courses</a>
+            <a href="Explorecourses.html">Explore Courses</a>
+            <a href="performance.html">Performance</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="exam corner.html">Exam Corner</a>
+            <a href="community.html">Community</a>
+        </div>
+        <a href="profile_final.html"><div class="profile"></div></a>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>My Courses</h2>
+        </div>
+        <ul class="nav-items">
+            <li class="nav-item active" onclick="showSection('courses')">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span class="nav-text">Courses</span>
+            </li>
+            <li class="nav-item" onclick="showSection('assignments')">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <span class="nav-text">Assignments</span>
+            </li>
+            <li class="nav-item" onclick="showSection('tests')">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="nav-text">Tests</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <!-- Courses Section -->
+        <div id="courses-section" class="section active">
+            <h1 style="margin-bottom: 20px;">My Courses</h1>
+            <div class="course-grid"></div>
+        </div>
+
+        <!-- Assignments Section -->
+        <div id="assignments-section" class="section">
+            <h1 style="margin-bottom: 20px;">My Assignments</h1>
+            <div id="assignments-list">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Tests Section -->
+        <div id="tests-section" class="section">
+            <h1 style="margin-bottom: 20px;">My Tests</h1>
+            <div id="tests-list">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Course Detail Section -->
+        <div id="course-detail-section" class="section">
+            <h1 id="course-detail-title" style="margin-bottom: 20px;">Course Title</h1>
+            <ul class="lesson-list" id="lesson-list">
+                <!-- Will be populated by JavaScript -->
+            </ul>
+        </div>
+
+        <!-- Lesson Section -->
+        <div id="lesson-section" class="section">
+            <h2 id="lesson-title" style="margin-bottom: 20px;">Lesson Title</h2>
+            
+            <div class="content-tabs">
+                <div class="tab active" onclick="switchTab('video', this)">Video</div>
+                <div class="tab" onclick="switchTab('assignment', this)">Assignment</div>
+                <div class="tab" onclick="switchTab('test', this)">Quiz</div>
+            </div>
+            
+            <!-- Video Tab Content -->
+            <div id="video-content" class="tab-content active">
+                <div class="video-container">
+                    <video id="lecture-video" class="video-player">
+                        <source src="sample-video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-controls">
+                        <button class="play-button" id="play-button" onclick="togglePlay()">Play</button>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="video-progress" style="width: 0%"></div>
+                        </div>
+                        <span class="video-time" id="video-time">0:00 / 0:00</span>
+                    </div>
+                </div>
+                <div style="max-width: 800px; margin: 20px auto; line-height: 1.6;">
+                    <h3>Lecture Notes</h3>
+                    <p id="video-description">This lecture covers the fundamentals of the topic. The video includes demonstrations and examples to help you understand the concepts better.</p>
+                </div>
+            </div>
+            
+            <!-- Assignment Tab Content -->
+            <div id="assignment-content" class="tab-content">
+                <div class="assignment-container">
+                    <h3 class="assignment-title" id="assignment-title">Assignment: Understanding Concepts</h3>
+                    <div class="assignment-description" id="assignment-description">
+                        Complete the following questions based on the lecture content. Your answers should demonstrate your understanding of the key concepts.
+                    </div>
+                    
+                    <div class="assignment-question">
+                        <p class="question-text">1. Explain the main concept discussed in the lecture and provide an example.</p>
+                        <textarea class="answer-textarea" placeholder="Type your answer here..."></textarea>
+                    </div>
+                    
+                    <div class="assignment-question">
+                        <p class="question-text">2. How would you apply this concept to solve a real-world problem?</p>
+                        <textarea class="answer-textarea" placeholder="Type your answer here..."></textarea>
+                    </div>
+                    
+                    <button class="submit-button">Submit Assignment</button>
+                </div>
+            </div>
+            
+            <!-- Quiz/Test Tab Content -->
+            <div id="test-content" class="tab-content">
+                <div id="timer-display" class="timer-display">Time left: 10:00</div>
+                <div class="test-container">
+                    <h3 class="test-title" id="test-title">Quiz: Topic Knowledge Check</h3>
+                    <div class="test-description" id="test-description">
+                        Select the best answer for each question. This quiz will test your understanding of the key concepts covered in the lecture.
+                    </div>
+                    
+                    <div class="test-question">
+                        <p class="question-text">1. Which of the following best describes the main concept?</p>
+                        <ul class="options-list">
+                            <li class="option-item">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" class="option-radio" value="a">
+                                    Option A: First description
+                                </label>
+                            </li>
+                            <li class="option-item">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" class="option-radio" value="b">
+                                    Option B: Second description
+                                </label>
+                            </li>
+                            <li class="option-item">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" class="option-radio" value="c">
+                                    Option C: Third description
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="test-question">
+                        <p class="question-text">2. Which application of the concept is most effective?</p>
+                        <ul class="options-list">
+                            <li class="option-item">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" class="option-radio" value="a">
+                                    Option A: First application
+                                </label>
+                            </li>
+                            <li class="option-item">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" class="option-radio" value="b">
+                                    Option B: Second application
+                                </label>
+                            </li>
+                            <li class="option-item">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" class="option-radio" value="c">
+                                    Option C: Third application
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <button class="submit-button" onclick="submitTest()">Submit Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="calculator-toggle" class="calculator-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <line x1="7" y1="8" x2="17" y2="8"/>
+          <line x1="7" y1="12" x2="17" y2="12"/>
+          <line x1="7" y1="16" x2="17" y2="16"/>
+        </svg>
+        Calculator
+      </button>
+      
+      <!-- Calculator UI (add this at the end of your body, before closing body tag) -->
+      <div id="calculator" class="calculator">
+        <div class="calculator-header">
+          <span>Calculator</span>
+          <button class="calculator-close">×</button>
+        </div>
+        <div class="calculator-body">
+          <div id="calc-display" class="calculator-display">0</div>
+          <div class="calculator-buttons">
+            <button class="calc-button function-button">C</button>
+            <button class="calc-button function-button">±</button>
+            <button class="calc-button function-button">%</button>
+            <button class="calc-button operation">÷</button>
+            
+            <button class="calc-button number">7</button>
+            <button class="calc-button number">8</button>
+            <button class="calc-button number">9</button>
+            <button class="calc-button operation">×</button>
+            
+            <button class="calc-button number">4</button>
+            <button class="calc-button number">5</button>
+            <button class="calc-button number">6</button>
+            <button class="calc-button operation">-</button>
+            
+            <button class="calc-button number">1</button>
+            <button class="calc-button number">2</button>
+            <button class="calc-button number">3</button>
+            <button class="calc-button operation">+</button>
+            
+            <button class="calc-button number zero">0</button>
+            <button class="calc-button number">.</button>
+            <button class="calc-button operation">=</button>
+          </div>
+        </div>
+      </div>
+
+    <script>
+        // Course data with 6 courses, each with 10 lessons
+const courses = [
+    {
+        id: 1,
+        title: 'Web Development',
+        progress: 35,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2"/><line x1="3" y1="9" x2="21" y2="9" stroke-width="2"/><line x1="9" y1="21" x2="9" y2="9" stroke-width="2"/></svg>',
+        lessons: [
+            { 
+                id: 101, 
+                title: 'Lesson 1 - HTML Basics', 
+                completed: true,
+                videoUrl: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
+                assignment: {
+                    title: 'HTML Structure Assignment',
+                    description: 'Create a basic HTML page structure with proper semantic elements.',
+                    questions: [
+                        'Create an HTML structure for a blog post with proper semantic elements.',
+                        'Explain the difference between <div> and semantic HTML elements.'
+                    ]
+                },
+                test: {
+                    title: 'HTML Basics Quiz',
+                    description: 'Test your knowledge of HTML fundamentals',
+                    questions: [
+                        {
+                            question: 'Which tag is used to define an HTML document?',
+                            options: ['<html>', '<body>', '<head>', '<document>'],
+                            answer: 0
+                        },
+                        {
+                            question: 'Which element is used for paragraph text?',
+                            options: ['<paragraph>', '<p>', '<text>', '<para>'],
+                            answer: 1
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 102, 
+                title: 'Lesson 2 - CSS Fundamentals', 
+                completed: true,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'CSS Styling Assignment',
+                    description: 'Apply CSS styling to the HTML structure you created in the previous assignment.',
+                    questions: [
+                        'Style a navigation bar with CSS using flexbox.',
+                        'Create a responsive grid layout for a gallery of images.'
+                    ]
+                },
+                test: {
+                    title: 'CSS Fundamentals Quiz',
+                    description: 'Test your understanding of CSS concepts',
+                    questions: [
+                        {
+                            question: 'Which CSS property is used to change text color?',
+                            options: ['text-color', 'font-color', 'color', 'text-style'],
+                            answer: 2
+                        },
+                        {
+                            question: 'Which CSS selector targets elements with a specific class?',
+                            options: ['#element', '.element', '*element', '@element'],
+                            answer: 1
+                        }
+                    ]
+                }
+            },
+            // More lessons for Web Development...
+            { 
+                id: 103, 
+                title: 'Lesson 3 - JavaScript Introduction', 
+                completed: true,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'JavaScript Basics Assignment',
+                    description: 'Write basic JavaScript functions and explore DOM manipulation.',
+                    questions: [
+                        'Create a function that calculates the factorial of a number.',
+                        'Write code to change page content when a button is clicked.'
+                    ]
+                },
+                test: {
+                    title: 'JavaScript Intro Quiz',
+                    description: 'Test your JavaScript fundamentals',
+                    questions: [
+                        {
+                            question: 'Which keyword is used to declare a variable in modern JavaScript?',
+                            options: ['var', 'const', 'let', 'Both B and C'],
+                            answer: 3
+                        },
+                        {
+                            question: 'What will console.log(typeof []) output?',
+                            options: ['array', 'object', 'undefined', 'list'],
+                            answer: 1
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 104, 
+                title: 'Lesson 4 - Responsive Design', 
+                completed: false,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'Responsive Design Assignment',
+                    description: 'Create a responsive webpage that adapts to different screen sizes.',
+                    questions: [
+                        'Implement a mobile-first responsive layout for a landing page.',
+                        'Explain the concept of breakpoints and how you used them in your design.'
+                    ]
+                },
+                test: {
+                    title: 'Responsive Design Quiz',
+                    description: 'Test your knowledge of responsive web design',
+                    questions: [
+                        {
+                            question: 'Which CSS feature is central to responsive design?',
+                            options: ['Media Queries', 'Flexbox', 'Grid', 'Animations'],
+                            answer: 0
+                        },
+                        {
+                            question: 'What does the viewport meta tag control?',
+                            options: ['Page colors', 'Page width and scaling', 'Font sizes', 'Image quality'],
+                            answer: 1
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 105, 
+                title: 'Lesson 5 - DOM Manipulation', 
+                completed: false,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'DOM Manipulation Assignment',
+                    description: 'Create interactive web elements using JavaScript DOM methods.',
+                    questions: [
+                        'Build a to-do list application using pure JavaScript.',
+                        'Implement form validation using DOM manipulation.'
+                    ]
+                },
+                test: {
+                    title: 'DOM Manipulation Quiz',
+                    description: 'Test your DOM manipulation skills',
+                    questions: [
+                        {
+                            question: 'Which method selects an element by its ID?',
+                            options: ['document.querySelector()', 'document.getElementById()', 'document.findElement()', 'document.selectElement()'],
+                            answer: 1
+                        },
+                        {
+                            question: 'What property is used to change the text content of an element?',
+                            options: ['innerHTML', 'innerText', 'textContent', 'Both B and C are correct'],
+                            answer: 3
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 106, 
+                title: 'Lesson 6 - Web APIs', 
+                completed: false,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'Web APIs Assignment',
+                    description: 'Work with browser APIs and third-party REST APIs.',
+                    questions: [
+                        'Create an application that fetches and displays data from a public API.',
+                        'Implement local storage to save user preferences in a web application.'
+                    ]
+                },
+                test: {
+                    title: 'Web APIs Quiz',
+                    description: 'Test your knowledge of web APIs',
+                    questions: [
+                        {
+                            question: 'Which function is commonly used to make HTTP requests in modern JavaScript?',
+                            options: ['ajax()', 'http()', 'fetch()', 'request()'],
+                            answer: 2
+                        },
+                        {
+                            question: 'What does REST stand for in the context of web APIs?',
+                            options: ['Real Easy System Transfer', 'Representational State Transfer', 'Remote Endpoint Service Technology', 'Regular Expression State Transfer'],
+                            answer: 1
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 107, 
+                title: 'Lesson 7 - Frontend Frameworks', 
+                completed: false,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'Frontend Framework Assignment',
+                    description: 'Build a single-page application using a popular frontend framework.',
+                    questions: [
+                        'Create a React component that manages state and renders a dynamic list.',
+                        'Compare React, Vue, and Angular based on your experience and research.'
+                    ]
+                },
+                test: {
+                    title: 'Frontend Frameworks Quiz',
+                    description: 'Test your knowledge of modern frontend frameworks',
+                    questions: [
+                        {
+                            question: 'Which of these is NOT a frontend framework/library?',
+                            options: ['React', 'Angular', 'Django', 'Vue'],
+                            answer: 2
+                        },
+                        {
+                            question: 'What is the virtual DOM used for in React?',
+                            options: ['Server-side rendering', 'State management', 'Efficient UI updates', 'Form validation'],
+                            answer: 2
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 108, 
+                title: 'Lesson 8 - Backend Basics', 
+                completed: false,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'Backend Basics Assignment',
+                    description: 'Create a simple server using Node.js and Express.',
+                    questions: [
+                        'Build a REST API with basic CRUD operations for a resource of your choice.',
+                        'Implement proper error handling and status codes in your API.'
+                    ]
+                },
+                test: {
+                    title: 'Backend Basics Quiz',
+                    description: 'Test your understanding of backend development',
+                    questions: [
+                        {
+                            question: 'Which of these is a Node.js web framework?',
+                            options: ['Django', 'Flask', 'Express', 'Rails'],
+                            answer: 2
+                        },
+                        {
+                            question: 'What does the HTTP status code 404 indicate?',
+                            options: ['Success', 'Server Error', 'Redirect', 'Not Found'],
+                            answer: 3
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 109, 
+                title: 'Lesson 9 - Database Integration', 
+                completed: false,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'Database Integration Assignment',
+                    description: 'Connect your backend application to a database system.',
+                    questions: [
+                        'Implement MongoDB integration with your Node.js application.',
+                        'Create database models and implement data validation.'
+                    ]
+                },
+                test: {
+                    title: 'Database Integration Quiz',
+                    description: 'Test your knowledge of database integration',
+                    questions: [
+                        {
+                            question: 'Which of these is a NoSQL database?',
+                            options: ['MySQL', 'PostgreSQL', 'MongoDB', 'Oracle'],
+                            answer: 2
+                        },
+                        {
+                            question: 'What is an ORM?',
+                            options: ['Object-Relational Mapping', 'Organized Resource Management', 'Online Regulated Memory', 'Original Record Method'],
+                            answer: 0
+                        }
+                    ]
+                }
+            },
+            { 
+                id: 110, 
+                title: 'Lesson 10 - Deployment', 
+                completed: false,
+                videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                assignment: {
+                    title: 'Deployment Assignment',
+                    description: 'Deploy your full-stack application to a cloud platform.',
+                    questions: [
+                        'Deploy your application to Heroku or another cloud platform.',
+                        'Set up environment variables and configure for production.'
+                    ]
+                },
+                test: {
+                    title: 'Deployment Quiz',
+                    description: 'Test your knowledge of web application deployment',
+                    questions: [
+                        {
+                            question: 'Which of these is NOT a cloud hosting platform?',
+                            options: ['Heroku', 'AWS', 'Netlify', 'MongoDB'],
+                            answer: 3
+                        },
+                        {
+                            question: 'What is CI/CD?',
+                            options: ['Computer Interface/Computer Design', 'Continuous Integration/Continuous Deployment', 'Compiled Interface/Compiled Design', 'Corporate Integration/Corporate Development'],
+                            answer: 1
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        id: 2,
+        title: 'Data Structures & Algorithms',
+        progress: 20,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="6" y="4" width="12" height="16" rx="2" stroke-width="2"/><line x1="12" y1="4" x2="12" y2="20" stroke-width="2"/></svg>',
+        lessons: generateLessons(201, 'Data Structures')
+    },
+    {
+        id: 3,
+        title: 'Machine Learning',
+        progress: 40,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19h16M4 14h5m5 0h6M4 9h2m5 0h9M4 4h16" stroke-width="2"/></svg>',
+        lessons: generateLessons(301, 'Machine Learning')
+    },
+    {
+        id: 4,
+        title: 'Cloud Computing',
+        progress: 15,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" stroke-width="2"/></svg>',
+        lessons: generateLessons(401, 'Cloud Computing')
+    },
+    {
+        id: 5,
+        title: 'Database Management',
+        progress: 65,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-width="2"/></svg>',
+        lessons: generateLessons(501, 'Database')
+    },
+    {
+        id: 6,
+        title: 'Software Engineering Practices',
+        progress: 50,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke-width="2"/></svg>',
+        lessons: generateLessons(601, 'Software Engineering')
+    }
+];
+
+// Generate lessons with assignments and tests
+function generateLessons(startId, topicPrefix) {
+    const lessons = [];
+    for (let i = 0; i < 10; i++) {
+        const lessonNumber = i + 1;
+        lessons.push({
+            id: startId + i,
+            title: `Lesson ${lessonNumber} - ${topicPrefix} Topic ${lessonNumber}`,
+            completed: lessonNumber <= 2,
+            videoUrl: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
+            assignment: {
+                title: `${topicPrefix} Assignment ${lessonNumber}`,
+                description: `Complete the assignment for ${topicPrefix} Lesson ${lessonNumber}.`,
+                questions: [
+                    `Question 1 for ${topicPrefix} Lesson ${lessonNumber}`,
+                    `Question 2 for ${topicPrefix} Lesson ${lessonNumber}`
+                ]
+            },
+            test: {
+                title: `${topicPrefix} Quiz ${lessonNumber}`,
+                description: `Test your knowledge of ${topicPrefix} Lesson ${lessonNumber}`,
+                questions: [
+                    {
+                        question: `Multiple choice question 1 for ${topicPrefix} Lesson ${lessonNumber}?`,
+                        options: ['Option A', 'Option B', 'Option C', 'Option D'],
+                        answer: 2
+                    },
+                    {
+                        question: `Multiple choice question 2 for ${topicPrefix} Lesson ${lessonNumber}?`,
+                        options: ['Option A', 'Option B', 'Option C', 'Option D'],
+                        answer: 1
+                    }
+                ]
+            }
+        });
+    }
+    return lessons;
+}
+
+// Course assignments - collect all assignments from courses
+const assignments = [];
+courses.forEach(course => {
+    course.lessons.forEach(lesson => {
+        if (lesson.assignment) {
+            assignments.push({
+                id: lesson.id * 100 + 1,
+                courseId: Math.floor(lesson.id / 100),
+                lessonId: lesson.id,
+                title: `${course.title}: ${lesson.assignment.title}`,
+                description: lesson.assignment.description,
+                dueDate: '2025-03-05',
+                status: lesson.completed ? 'Completed' : 'Pending'
+            });
+        }
+    });
+});
+
+// Course tests - collect all tests from courses
+const tests = [];
+courses.forEach(course => {
+    course.lessons.forEach(lesson => {
+        if (lesson.test) {
+            tests.push({
+                id: lesson.id * 100 + 2,
+                courseId: Math.floor(lesson.id / 100),
+                lessonId: lesson.id,
+                title: `${course.title}: ${lesson.test.title}`,
+                description: lesson.test.description,
+                timeLimit: 10, // minutes
+                status: lesson.completed ? 'Completed' : 'Not Attempted'
+            });
+        }
+    });
+});
+
+// Current state
+let currentCourse = null;
+let currentLesson = null;
+let timerInterval = null;
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    renderCourses();
+    renderAssignments();
+    renderTests();
+    setupCalculator();
+});
+
+// Render courses in the course grid
+function renderCourses() {
+    const courseGrid = document.querySelector('.course-grid');
+    courseGrid.innerHTML = '';
+    
+    courses.forEach(course => {
+        const courseCard = document.createElement('div');
+        courseCard.className = 'course-card';
+        courseCard.innerHTML = `
+            <div class="course-icon">${course.icon}</div>
+            <h3 class="course-title">${course.title}</h3>
+            <p>Progress: ${course.progress}%</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: ${course.progress}%"></div>
+            </div>
+        `;
+        courseCard.addEventListener('click', () => viewCourse(course.id));
+        courseGrid.appendChild(courseCard);
+    });
+}
+
+// Render assignments list
+function renderAssignments() {
+    const assignmentsList = document.getElementById('assignments-list');
+    assignmentsList.innerHTML = '';
+    
+    if (assignments.length === 0) {
+        assignmentsList.innerHTML = '<p>No assignments available.</p>';
+        return;
+    }
+    
+    assignments.forEach(assignment => {
+        const assignmentItem = document.createElement('div');
+        assignmentItem.className = 'course-card';
+        assignmentItem.innerHTML = `
+            <h3 class="course-title">${assignment.title}</h3>
+            <p>${assignment.description}</p>
+            <p>Due: ${assignment.dueDate}</p>
+            <p>Status: <span style="color: ${assignment.status === 'Completed' ? '#4CAF50' : '#FFC107'}">${assignment.status}</span></p>
+        `;
+        assignmentItem.addEventListener('click', () => viewLesson(assignment.courseId, assignment.lessonId, 'assignment'));
+        assignmentsList.appendChild(assignmentItem);
+    });
+}
+
+// Render tests list
+function renderTests() {
+    const testsList = document.getElementById('tests-list');
+    testsList.innerHTML = '';
+    
+    if (tests.length === 0) {
+        testsList.innerHTML = '<p>No tests available.</p>';
+        return;
+    }
+    
+    tests.forEach(test => {
+        const testItem = document.createElement('div');
+        testItem.className = 'course-card';
+        testItem.innerHTML = `
+            <h3 class="course-title">${test.title}</h3>
+            <p>${test.description}</p>
+            <p>Time Limit: ${test.timeLimit} minutes</p>
+            <p>Status: <span style="color: ${test.status === 'Completed' ? '#4CAF50' : '#FFC107'}">${test.status}</span></p>
+        `;
+        testItem.addEventListener('click', () => viewLesson(test.courseId, test.lessonId, 'test'));
+        testsList.appendChild(testItem);
+    });
+}
+
+// Show different sections
+function showSection(sectionName) {
+    // Update nav item active state
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    const activeNavItem = document.querySelector(`.nav-item[onclick="showSection('${sectionName}')"]`);
+    if (activeNavItem) {
+        activeNavItem.classList.add('active');
+    }
+    
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show selected section
+    let sectionId;
+    switch(sectionName) {
+        case 'courses':
+            sectionId = 'courses-section';
+            break;
+        case 'assignments':
+            sectionId = 'assignments-section';
+            renderAssignments();
+            break;
+        case 'tests':
+            sectionId = 'tests-section';
+            renderTests();
+            break;
+        case 'course-detail':
+            sectionId = 'course-detail-section';
+            break;
+        case 'lesson':
+            sectionId = 'lesson-section';
+            break;
+        default:
+            sectionId = 'courses-section';
+    }
+    
+    document.getElementById(sectionId).classList.add('active');
+}
+
+// View specific course
+function viewCourse(courseId) {
+    currentCourse = courses.find(course => course.id === courseId);
+    
+    if (!currentCourse) return;
+    
+    document.getElementById('course-detail-title').textContent = currentCourse.title;
+    
+    const lessonList = document.getElementById('lesson-list');
+    lessonList.innerHTML = '';
+    
+    currentCourse.lessons.forEach(lesson => {
+        const lessonItem = document.createElement('li');
+        lessonItem.className = `lesson-item ${lesson.completed ? 'completed' : ''}`;
+        lessonItem.innerHTML = `
+            <div class="lesson-title">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                ${lesson.title}
+            </div>
+            ${lesson.completed ? '<span class="completion-badge">Completed</span>' : '<span>Not Completed</span>'}
+        `;
+        lessonItem.addEventListener('click', () => viewLesson(currentCourse.id, lesson.id, 'video'));
+        lessonList.appendChild(lessonItem);
+    });
+    
+    showSection('course-detail');
+}
+
+let videoPlayer;
+let playButton;
+let progressBar;
+let progressFill;
+let videoTime;
+
+function setupVideoControls() {
+    videoPlayer = document.getElementById('lecture-video');
+    playButton = document.getElementById('play-button');
+    progressBar = document.querySelector('.progress-bar');
+    progressFill = document.getElementById('video-progress');
+    videoTime = document.getElementById('video-time');
+
+    // Add controls attribute to video
+    videoPlayer.controls = true;
+
+    // Play/Pause
+    playButton.onclick = function() {
+        if (videoPlayer.paused) {
+            videoPlayer.play();
+            playButton.textContent = 'Pause';
+        } else {
+            videoPlayer.pause();
+            playButton.textContent = 'Play';
+        }
+    };
+
+    // Progress bar and time updates
+    videoPlayer.addEventListener('timeupdate', function() {
+        const percentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+        progressFill.style.width = `${percentage}%`;
+        videoTime.textContent = `${formatTime(videoPlayer.currentTime)} / ${formatTime(videoPlayer.duration)}`;
+    });
+
+    progressBar.addEventListener('click', function(e) {
+        const rect = progressBar.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / progressBar.offsetWidth;
+        videoPlayer.currentTime = pos * videoPlayer.duration;
+    });
+}
+
+function togglePlay() {
+    if (videoPlayer.paused) {
+        videoPlayer.play();
+    } else {
+        videoPlayer.pause();
+    }
+}
+
+function updatePlayButton() {
+    playButton.textContent = videoPlayer.paused ? 'Play' : 'Pause';
+}
+
+function updateProgress() {
+    const percentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+    progressFill.style.width = `${percentage}%`;
+    videoTime.textContent = `${formatTime(videoPlayer.currentTime)} / ${formatTime(videoPlayer.duration)}`;
+}
+
+function seek(event) {
+    const rect = progressBar.getBoundingClientRect();
+    const percentage = (event.clientX - rect.left) / rect.width;
+    videoPlayer.currentTime = percentage * videoPlayer.duration;
+}
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    seconds = Math.floor(seconds % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// View specific lesson
+function viewLesson(courseId, lessonId, activeTab = 'video') {
+    currentCourse = courses.find(course => course.id === courseId);
+    if (!currentCourse) return;
+    
+    currentLesson = currentCourse.lessons.find(lesson => lesson.id === lessonId);
+    if (!currentLesson) return;
+    
+    // Set lesson title
+    document.getElementById('lesson-title').textContent = currentLesson.title;
+    
+    // Set up video source
+    const videoPlayer = document.getElementById('lecture-video');
+    videoPlayer.src = currentLesson.videoUrl;
+    videoPlayer.load();
+    setupVideoControls();
+    
+    // Set up lesson description
+    document.getElementById('video-description').textContent = 
+        `This lecture covers ${currentLesson.title} from the ${currentCourse.title} course. Watch the video to learn key concepts.`;
+    
+    // Set up assignment content
+    if (currentLesson.assignment) {
+        document.getElementById('assignment-title').textContent = currentLesson.assignment.title;
+        document.getElementById('assignment-description').textContent = currentLesson.assignment.description;
+        
+        const assignmentContainer = document.querySelector('.assignment-container');
+        
+        // Remove all existing assignment questions
+        const existingQuestions = assignmentContainer.querySelectorAll('.assignment-question');
+        existingQuestions.forEach(q => q.remove());
+        
+        // Find assignment due date
+        const assignment = assignments.find(a => a.lessonId === currentLesson.id);
+        const dueDate = assignment ? assignment.dueDate : 'No due date set';
+
+        const existingDueDate = assignmentContainer.querySelector('.assignment-due-date');
+if (existingDueDate) {
+    existingDueDate.remove();
+}
+        
+        // Add due date display
+        const dueDateDiv = document.createElement('div');
+        dueDateDiv.className = 'assignment-due-date';
+        dueDateDiv.innerHTML="";
+        dueDateDiv.innerHTML = `<p class="due-date">Due Date: ${dueDate}</p>`;
+        assignmentContainer.insertBefore(dueDateDiv, assignmentContainer.firstChild);
+        
+        // Add assignment questions
+        if (currentLesson.assignment.questions && currentLesson.assignment.questions.length > 0) {
+            currentLesson.assignment.questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'assignment-question';
+                questionDiv.innerHTML = `
+                    <p class="question-text">${index + 1}. ${question}</p>
+                    <textarea class="answer-textarea" placeholder="Type your answer here..."></textarea>
+                `;
+                assignmentContainer.insertBefore(questionDiv, assignmentContainer.querySelector('.submit-button'));
+            });
+        }
+
+        // Add submit button event listener
+        const submitButton = assignmentContainer.querySelector('.submit-button');
+        submitButton.onclick = submitAssignment;
+    }
+    
+    // Set up test content
+    if (currentLesson.test) {
+        document.getElementById('test-title').textContent = currentLesson.test.title;
+        document.getElementById('test-description').textContent = currentLesson.test.description;
+        
+        const testContainer = document.querySelector('.test-container');
+        
+        // Remove all existing test questions
+        const existingQuestions = testContainer.querySelectorAll('.test-question');
+        existingQuestions.forEach(q => q.remove());
+        
+        // Add test questions
+        const submitButton = testContainer.querySelector('.submit-button');
+        if (currentLesson.test.questions && currentLesson.test.questions.length > 0) {
+            currentLesson.test.questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'test-question';
+                
+                let optionsHtml = '';
+                question.options.forEach((option, optIndex) => {
+                    optionsHtml += `
+                        <li class="option-item">
+                            <label class="option-label">
+                                <input type="radio" name="q${index}" class="option-radio" value="${optIndex}">
+                                ${option}
+                            </label>
+                        </li>
+                    `;
+                });
+                
+                questionDiv.innerHTML = `
+                    <p class="question-text">${index + 1}. ${question.question}</p>
+                    <ul class="options-list">
+                        ${optionsHtml}
+                    </ul>
+                `;
+                testContainer.insertBefore(questionDiv, submitButton);
+            });
+        }
+        
+        // Setup test timer
+        resetTestTimer();
+    }
+
+    
+    // Switch to the requested tab
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => content.classList.remove('active'));
+    
+    let activeTabElement;
+    let activeContentElement;
+    
+    switch(activeTab) {
+        case 'video':
+            activeTabElement = document.querySelector('.tab:nth-child(1)');
+            activeContentElement = document.getElementById('video-content');
+            break;
+        case 'assignment':
+            activeTabElement = document.querySelector('.tab:nth-child(2)');
+            activeContentElement = document.getElementById('assignment-content');
+            break;
+        case 'test':
+            activeTabElement = document.querySelector('.tab:nth-child(3)');
+            activeContentElement = document.getElementById('test-content');
+            startTestTimer();
+            break;
+    }
+    
+    if (activeTabElement) activeTabElement.classList.add('active');
+    if (activeContentElement) activeContentElement.classList.add('active');
+    
+    showSection('lesson');
+}
+
+// Switch between tabs in the lesson view
+function switchTab(tabName, tabElement) {
+    // Clear active state from all tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Set active state on clicked tab
+    tabElement.classList.add('active');
+    
+    // Hide all tab content
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Show selected tab content
+    document.getElementById(`${tabName}-content`).classList.add('active');
+    
+    // Handle timer for test tab
+    if (tabName === 'test') {
+        startTestTimer();
+    } else {
+        clearInterval(timerInterval);
+        document.getElementById('timer-display').style.display = 'none';
+    }
+}
+
+// Test timer functions
+function startTestTimer() {
+    resetTestTimer();
+    document.getElementById('timer-display').style.display = 'block';
+    
+    let minutes = 10;
+    let seconds = 0;
+    
+    timerInterval = setInterval(() => {
+        if (seconds === 0) {
+            if (minutes === 0) {
+                clearInterval(timerInterval);
+                alert('Time is up! Your test will be submitted automatically.');
+                submitTest();
+                return;
+            }
+            minutes--;
+            seconds = 59;
+        } else {
+            seconds--;
+        }
+        
+        document.getElementById('timer-display').textContent = 
+            `Time Remaining: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+}
+
+function resetTestTimer() {
+    clearInterval(timerInterval);
+    document.getElementById('timer-display').textContent = 'Time Remaining: 10:00';
+}
+
+// Submit assignment
+function submitAssignment() {
+    // Collect answers from text areas
+    const answerTexts = document.querySelectorAll('.answer-textarea');
+    const answers = Array.from(answerTexts).map(textarea => textarea.value);
+    
+    // Validate that all questions are answered
+    const unansweredCount = answers.filter(a => a.trim() === '').length;
+    if (unansweredCount > 0) {
+        alert(`Please answer all questions. ${unansweredCount} question(s) remaining.`);
+        return;
+    }
+    
+    // Update the lesson status to completed
+    if (currentLesson) {
+        currentLesson.completed = true;
+        
+        // Update assignment status
+        const assignmentIndex = assignments.findIndex(a => a.lessonId === currentLesson.id);
+        if (assignmentIndex !== -1) {
+            assignments[assignmentIndex].status = 'Completed';
+        }
+        
+        // Show success message
+        alert('Assignment submitted successfully!');
+        
+        // Update course progress
+        updateCourseProgress();
+        
+        // Return to course detail view
+        viewCourse(currentCourse.id);
+    }
+}
+
+// Submit test
+function submitTest() {
+    clearInterval(timerInterval);
+    
+    // Collect answers from radio buttons
+    const answers = [];
+    const questionCount = currentLesson.test.questions.length;
+    
+    for (let i = 0; i < questionCount; i++) {
+        const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+        answers.push(selectedOption ? parseInt(selectedOption.value) : -1);
+    }
+    
+    // Check if all questions are answered
+    const unansweredCount = answers.filter(a => a === -1).length;
+    if (unansweredCount > 0) {
+        alert(`Please answer all questions. ${unansweredCount} question(s) remaining.`);
+        return false;
+    }
+    
+    // Calculate score
+    let correctCount = 0;
+    for (let i = 0; i < questionCount; i++) {
+        if (answers[i] === currentLesson.test.questions[i].answer) {
+            correctCount++;
+        }
+    }
+    
+    const score = Math.round((correctCount / questionCount) * 100);
+    
+    // Update lesson and test status
+    if (currentLesson) {
+        currentLesson.completed = true;
+        
+        // Update test status
+        const testIndex = tests.findIndex(t => t.lessonId === currentLesson.id);
+        if (testIndex !== -1) {
+            tests[testIndex].status = 'Completed';
+        }
+        
+        // Show score
+        alert(`Test completed! Your score: ${score}%`);
+        
+        // Update course progress
+        updateCourseProgress();
+        
+        // Return to course detail view
+        viewCourse(currentCourse.id);
+    }
+    
+    return true;
+}
+
+// Update course progress
+function updateCourseProgress() {
+    if (!currentCourse) return;
+    
+    const totalLessons = currentCourse.lessons.length;
+    const completedLessons = currentCourse.lessons.filter(lesson => lesson.completed).length;
+    
+    // Calculate new progress percentage
+    currentCourse.progress = Math.round((completedLessons / totalLessons) * 100);
+    
+    // Refresh the courses grid
+    renderCourses();
+}
+
+// Back to previous section
+function goBack() {
+    clearInterval(timerInterval);
+    
+    if (document.getElementById('lesson-section').classList.contains('active')) {
+        viewCourse(currentCourse.id);
+    } else if (document.getElementById('course-detail-section').classList.contains('active')) {
+        showSection('courses');
+    }
+}
+
+// Setup calculator
+function initializeCalculator() {
+  // DOM elements
+  const calculatorToggle = document.getElementById('calculator-toggle');
+  const calculator = document.getElementById('calculator');
+  const calculatorClose = calculator.querySelector('.calculator-close');
+  const display = document.getElementById('calc-display');
+  const buttons = calculator.querySelectorAll('.calc-button');
+  
+  // Calculator state
+  let currentValue = '0';
+  let previousValue = '';
+  let currentOperator = null;
+  let shouldResetDisplay = false;
+  
+  // Toggle calculator visibility
+  function toggleCalculator() {
+    calculator.classList.toggle('active');
+  }
+  
+  // Update display
+  function updateDisplay() {
+    // Limit display length to prevent overflow
+    let displayText = currentValue;
+    if (displayText.length > 12) {
+      if (displayText.includes('.')) {
+        // For decimal numbers, truncate decimal places
+        const parts = displayText.split('.');
+        const integerPart = parts[0];
+        const decimalPart = parts[1];
+        
+        if (integerPart.length >= 12) {
+          displayText = Number(displayText).toExponential(6);
+        } else {
+          const maxDecimalPlaces = 11 - integerPart.length - 1; // -1 for the decimal point
+          displayText = Number(displayText).toFixed(Math.min(maxDecimalPlaces, decimalPart.length));
+        }
+      } else {
+        // For large integers, use exponential notation
+        displayText = Number(displayText).toExponential(6);
+      }
+    }
+    
+    display.textContent = displayText;
+  }
+  
+  // Handle number input
+  function inputDigit(digit) {
+    if (shouldResetDisplay) {
+      currentValue = digit;
+      shouldResetDisplay = false;
+    } else {
+      currentValue = currentValue === '0' ? digit : currentValue + digit;
+    }
+    updateDisplay();
+  }
+  
+  // Handle decimal point
+  function inputDecimal() {
+    if (shouldResetDisplay) {
+      currentValue = '0.';
+      shouldResetDisplay = false;
+    } else if (!currentValue.includes('.')) {
+      currentValue += '.';
+    }
+    updateDisplay();
+  }
+  
+  // Handle operators
+  function handleOperator(operator) {
+    const inputValue = parseFloat(currentValue);
+    
+    // If we already have a pending operation, perform it first
+    if (previousValue && currentOperator && !shouldResetDisplay) {
+      const result = calculate();
+      currentValue = String(result);
+      updateDisplay();
+    }
+    
+    previousValue = currentValue;
+    currentOperator = operator;
+    shouldResetDisplay = true;
+  }
+  
+  // Calculate result
+  function calculate() {
+    const prev = parseFloat(previousValue);
+    const current = parseFloat(currentValue);
+    
+    if (isNaN(prev) || isNaN(current)) return current;
+    
+    let result;
+    switch (currentOperator) {
+      case '+':
+        result = prev + current;
+        break;
+      case '-':
+        result = prev - current;
+        break;
+      case '×':
+        result = prev * current;
+        break;
+      case '÷':
+        if (current === 0) {
+          alert('Cannot divide by zero');
+          return 0;
+        }
+        result = prev / current;
+        break;
+      default:
+        return current;
+    }
+    
+    // Handle floating point precision
+    result = Math.round(result * 1000000000) / 1000000000;
+    return result;
+  }
+  
+  // Clear calculator
+  function clearCalculator() {
+    currentValue = '0';
+    previousValue = '';
+    currentOperator = null;
+    shouldResetDisplay = false;
+    updateDisplay();
+  }
+  
+  // Handle percentage
+  function handlePercentage() {
+    const value = parseFloat(currentValue);
+    currentValue = String(value / 100);
+    updateDisplay();
+  }
+  
+  // Toggle sign
+  function toggleSign() {
+    currentValue = String(-parseFloat(currentValue));
+    updateDisplay();
+  }
+  
+  // Event Listeners
+  calculatorToggle.addEventListener('click', toggleCalculator);
+  calculatorClose.addEventListener('click', toggleCalculator);
+  
+  // Close calculator when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!calculator.contains(event.target) && event.target !== calculatorToggle) {
+      calculator.classList.remove('active');
+    }
+  });
+  
+  // Button click handlers
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const value = button.textContent;
+      
+      // Handle different button types
+      if (!isNaN(value) || value === '0') {
+        inputDigit(value);
+      } else if (value === '.') {
+        inputDecimal();
+      } else if (value === 'C') {
+        clearCalculator();
+      } else if (value === '±') {
+        toggleSign();
+      } else if (value === '%') {
+        handlePercentage();
+      } else if (value === '=') {
+        if (currentOperator) {
+          const result = calculate();
+          currentValue = String(result);
+          previousValue = '';
+          currentOperator = null;
+          shouldResetDisplay = true;
+          updateDisplay();
+        }
+      } else if (['+', '-', '×', '÷'].includes(value)) {
+        handleOperator(value);
+      }
+    });
+  });
+  
+  // Initialize display
+  updateDisplay();
+}
+
+// Initialize calculator when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  initializeCalculator();
+});
+// Initialize the app
+document.addEventListener('DOMContentLoaded', function() {
+    renderCourses();
+    renderAssignments();
+    renderTests();
+    //setupCalculator();
+});
+
+
+
+</script>
+</body>
+</html>

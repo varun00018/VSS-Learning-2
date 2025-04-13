@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSS Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #300030;
+            color: white;
+            text-align: center;
+        }
+        .logos {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .title {
+            vertical-align: auto;
+            font-size: 28px;
+            color: white;
+            font-weight: bold;
+        }
+        header {
+            background: #8C0A50;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+        .social-icons a:hover {
+            color: #ff85b5;
+        }
+        .hero {
+            padding: 50px;
+            background: linear-gradient(to right,#7D0A4D,#460C3C);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons button {
+    background: linear-gradient(135deg, #8C0A50, #460C3C); /* Gradient for depth */
+    border: 2px solid #ff85b5; /* Soft border to make it pop */
+    padding: 12px 24px;
+    margin: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 30px; /* Rounded button for a modern look */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
+}
+
+.buttons button:hover {
+    background: linear-gradient(135deg, #ff85b5, #7D0A4D); /* Lighter gradient on hover */
+    border-color: #ff6699;
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.buttons button:active {
+    transform: scale(0.98); /* Subtle click effect */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+        .content {
+    display: flex;
+    justify-content: space-between; /* Ensures left & right alignment */
+    align-items: flex-start;
+    padding: 20px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.events-container {
+    width: 20%; /* Left side */
+    padding: 15px;
+    border-radius: 10px;
+    background: #7D0A4D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dates-container {
+    flex-grow: 1; /* Takes up the remaining space */
+    padding: 15px;
+    border-radius: 10px;
+    background: #7D0A4D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+        .events-title, .dates-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .event-card, .date-card {
+            background: #35023B;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            width: 90%;
+            text-align: center;
+        }
+        .event-name, .date-name {
+            color: #FFD700;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .event-date, .date-span {
+            color: white;
+            font-size: 16px;
+        }
+        .why-choose {
+            width: 45%;
+            padding: 20px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 0 2%;
+        }
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .feature {
+            text-align: center;
+            margin: 10px;
+            padding: 15px;
+        }
+        .feature span {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .founder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            background: #4b0082;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .founder img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+        .footer {
+            background-color: #4a0245;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+        }
+        .footer-section h3 {
+            color: #ff85b5;
+        }
+        .footer-section p, .footer-section ul {
+            margin: 5px 0;
+            list-style: none;
+            padding: 0;
+        }
+        .footer-section ul li {
+            margin: 5px 0;
+        }
+        .footer-section a {
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+        .footer-section a:hover {
+            color: #ff85b5;
+        }
+        .download-btn {
+            display: inline-block;
+            background-color: #ff2f68;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .download-btn:hover {
+            background-color: #ff85b5;
+        }
+        .footer-bottom {
+            background-color: #2d012d;
+            padding: 10px 0;
+            margin-top: 10px;
+        }
+        .carousel {
+            position: relative;
+            width: 70%;
+            margin: 50px auto;
+            padding: 20px;
+            background: #4a005a;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .slide {
+            display: none;
+            animation: fade 1s ease-in-out;
+        }
+        .slide.active {
+            display: block;
+        }
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .slide img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-top: 10px;
+            object-fit: cover;
+        }
+        blockquote {
+            font-style: italic;
+            color: #ffd700;
+        }
+        .carousel button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .carousel button:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .prev { left: 10px; }
+        .next { right: 10px; }
+        .achievers {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .exam-section {
+            background: #4a004a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #ffcc00;
+        }
+        .achievers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .achiever {
+            background: #660066;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .badge {
+            background: #ff4081;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .events-container, .dates-container, .why-choose {
+                width: 90%;
+                margin: 10px 0;
+            }
+            .achievers-grid {
+                grid-template-columns: 1fr;
+            }
+            .carousel {
+                width: 90%;
+            }
+            .founder {
+                flex-direction: column;
+                text-align: center;
+            }
+            .founder img {
+                margin: 0 0 20px 0;
+            }
+            
+        }
+        .achievers-grid img{
+                width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+          <img src="https://img.icons8.com/?size=100&id=4NvM6rNgPiFz&format=png&color=f39c12" class="logos">
+          <span class="title">VSS Learning</span>
+        </div>
+        <div class="social-icons">
+            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your Gateway to Success</h1>
+            <p>"Education is not preparation for life; education is life itself."</p>
+            <div class="buttons">
+                <a href="signin.html"><button class="login" id="loginBtn">Login</button></a>
+                <a href="login.html"><button class="signup" id="signUpBtn">Sign Up</button></a>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="events-container">
+            <div class="events-title">Upcoming Events</div>
+            <div class="event-card">
+                <div class="event-name">JEE Master Class Series</div>
+                <div class="event-date">March 15-20, 2024</div>
+            </div>
+            <div class="event-card">
+                <div class="event-name">NEET Biology Marathon</div>
+                <div class="event-date">March 25-30, 2024</div>
+            </div>
+            <div class="event-card">
+                <div class="event-name">Career Counselling Week</div>
+                <div class="event-date">April 1-7, 2024</div>
+            </div>
+            <div class="event-card">
+                <div class="event-name">Physics Olympiad Prep</div>
+                <div class="event-date">April 10-15, 2024</div>
+            </div>
+        </div>
+
+        <section class="why-choose">
+            <h2>Why Choose VSS Learning?</h2>
+            <div class="features">
+                <div class="feature">
+                    <span>🎓</span>
+                    <h4>Expert Faculty</h4>
+                    <p>Learn from India's top educators</p>
+                </div>
+                <div class="feature">
+                    <span>💻</span>
+                    <h4>Interactive Learning</h4>
+                    <p>Cutting-edge digital platform</p>
+                </div>
+                <div class="feature">
+                    <span>🎯</span>
+                    <h4>Personalized Attention</h4>
+                    <p>Individual mentorship</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="dates-container">
+            <div class="dates-title">Important Dates</div>
+            <div class="date-card">
+                <div class="date-name">JEE Main 2024 (Session 1)</div>
+                <div class="date-span">Jan 24 - Feb 1, 2024</div>
+            </div>
+            <div class="date-card">
+                <div class="date-name">JEE Main 2024 (Session 2)</div>
+                <div class="date-span">Apr 1 - Apr 15, 2024</div>
+            </div>
+            <div class="date-card">
+                <div class="date-name">NEET UG 2024</div>
+                <div class="date-span">May 5, 2024</div>
+            </div>
+            <div class="date-card">
+                <div class="date-name">JEE Advanced 2024</div>
+                <div class="date-span">May 26, 2024</div>
+            </div>
+        </div>
+    </section>
+    <section class="founder">
+        <img src="rahul.png" alt="Dr. Vikram S. Singh">
+        <div class="bio">
+            <h3>Dr. Vikram S. Singh</h3>
+            <h4>Founder & Academic Director</h4>
+            <p>Welcome to VSS Learning, where we're revolutionizing education through technology and innovation. With over 20 years of experience in education, I'm committed to providing a platform that helps students achieve their full potential.</p>
+        </div>
+    </section>
+    <section class="achievers">
+      <h2>Our Recent Achievers</h2>
+      <div class="exam-section">
+          <h3>JEE Advanced 2023</h3>
+          <div class="achievers-grid">
+              <div class="achiever">  <img src="rahul.png" alt="abc"> <strong>Arjun Patel</strong><span>#1 Score: 360/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Priya Sharma</strong> <span>#5 Score: 348/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Rahul Verma</strong> <span>#8 Score: 345/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Ananya Singh</strong> <span>#12 Score: 342/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Karthik Raja</strong> <span>#15 Score: 340/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Sneha Gupta</strong> <span>#18 Score: 336/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Aditya Kumar</strong> <span>#22 Score: 335/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Riya Patel</strong> <span>#25 Score: 333/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Varun Mehta</strong> <span>#28 Score: 330/360</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Ishita Shah</strong> <span>#30 Score: 328/360</span></div>
+          </div>
+      </div>
+
+      <div class="exam-section">
+          <h3>NEET 2023</h3>
+          <div class="achievers-grid">
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Maya Reddy</strong> <span>#1 Score: 715/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Rohan Joshi</strong> <span>#3 Score: 710/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Aisha Khan</strong> <span>#6 Score: 708/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Vikram Singh</strong> <span>#9 Score: 705/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Neha Gupta</strong> <span>#12 Score: 703/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Aryan Shah</strong> <span>#15 Score: 700/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Zara Patel</strong> <span>#18 Score: 698/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Dev Kumar</strong> <span>#21 Score: 695/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Sanya Mehta</strong> <span>#24 Score: 693/720</span></div>
+              <div class="achiever"><img src="rahul.png" alt="abc"> <strong>Kabir Rao</strong> <span>#27 Score: 690/720</span></div>
+          </div>
+      </div>
+  </section>
+  
+  <div class="carousel">
+    <div class="slide active">
+        <img src="rahul.png" alt="Priya Sharma">
+        <h2>Priya Sharma</h2>
+        <p><strong>AIR 5 in JEE Advanced 2023</strong></p>
+        <p>IIT Bombay - Computer Science</p>
+        <blockquote>"VSS Learning's structured approach and mentorship were key to my success."</blockquote>
+    </div>
+    
+    <div class="slide">
+        <img src="rahul.png" alt="Rahul Verma">
+        <h2>Rahul Verma</h2>
+        <p><strong>AIR 8 in JEE Advanced 2023</strong></p>
+        <p>IIT Delhi - Electrical Engineering</p>
+        <blockquote>"The faculty's dedication and innovative teaching methods made complex topics easy to understand."</blockquote>
+    </div>
+    
+    <div class="slide">
+        <img src="rahul.png" alt="Maya Reddy">
+        <h2>Maya Reddy</h2>
+        <p><strong>AIR 1 in NEET 2023</strong></p>
+        <p>AIIMS Delhi - MBBS</p>
+        <blockquote>"The comprehensive study material and regular mock tests were invaluable for my preparation."</blockquote>
+    </div>
+
+    <button class="prev" onclick="prevSlide()">❮</button>
+    <button class="next" onclick="nextSlide()">❯</button>
+</div>
+
+<footer class="footer">
+  <div class="footer-container">
+      <!-- Contact Section -->
+      <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-envelope"></i>
+              <a href="mailto:support@vsslearning.com">support@vsslearning.com</a>
+          </p>
+          <p><i class="fas fa-phone"></i>
+              <a href="tel:18001234567">1800-123-4567</a>
+          </p>
+          <p><i class="fas fa-map-marker-alt"></i>
+              <a href="https://www.google.com/maps/search/?q=123+Education+Street,+New+Delhi+-+110001" target="_blank">
+                  123 Education Street, New Delhi - 110001
+              </a>
+          </p>
+      </div>
+      
+
+      <!-- Quick Links -->
+      <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Courses</a></li>
+              <li><a href="#">Study Materials</a></li>
+              <li><a href="#">Success Stories</a></li>
+          </ul>
+      </div>
+
+      <!-- Legal Section -->
+      <div class="footer-section">
+          <h3>Legal</h3>
+          <ul>
+              <li><a href="#">Terms of Use</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Disclaimer</a></li>
+              <li><a href="#">Refund Policy</a></li>
+          </ul>
+      </div>
+
+      <!-- App Download -->
+      <div class="footer-section">
+          <h3>Download Our App</h3>
+          <a href="#" class="download-btn">
+              <i class="fab fa-google-play"></i> Get it on Google Play
+          </a>
+      </div>
+  </div>
+  <div class="footer-bottom">
+      <p>© 2025 VSS Learning. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const loginButton = document.getElementById("loginBtn");
+    const signUpButton = document.getElementById("signUpBtn");
+  });
+
+  let index = 0;
+  const slides = document.querySelectorAll(".slide");
+  const intervalTime = 5000; // 5 seconds
+          
+  function showSlide(i) {
+      slides.forEach(slide => slide.classList.remove("active"));
+      slides[i].classList.add("active");
+  }
+          
+  function nextSlide() {
+      index = (index + 1) % slides.length;
+      showSlide(index);
+  }
+          
+  function prevSlide() {
+      index = (index - 1 + slides.length) % slides.length;
+      showSlide(index);
+  }
+          
+  // Auto-play every 5 seconds
+  let autoPlay = setInterval(nextSlide, intervalTime);
+          
+  // Pause auto-play on button hover
+  document.querySelector(".prev").addEventListener("mouseenter", () => clearInterval(autoPlay));
+  document.querySelector(".next").addEventListener("mouseenter", () => clearInterval(autoPlay));
+          
+  // Resume auto-play on mouse leave
+  document.querySelector(".prev").addEventListener("mouseleave", () => autoPlay = setInterval(nextSlide, intervalTime));
+  document.querySelector(".next").addEventListener("mouseleave", () => autoPlay = setInterval(nextSlide, intervalTime));
+</script>
+</body>
+</html>

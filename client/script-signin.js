@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (email && password) {
             try {
-                const res = await fetch('http://localhost:5000/login', {
+                const res = await fetch('https://varun00018.github.io/VSS-Learning-2/client/signin.html', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (name && email && password) {
             try {
-                const res = await fetch('http://localhost:5000/register', {
+                const res = await fetch('https://varun00018.github.io/VSS-Learning-2/client/signin.html', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })
